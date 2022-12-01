@@ -24,7 +24,10 @@
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
-
+#include <task_init.h>
+#include <ethernet.h>
+#include <cmsis_os.h>
+#include <lwip.h>
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -44,7 +47,8 @@
 
 /* Private variables ---------------------------------------------------------*/
 /* USER CODE BEGIN Variables */
-
+unsigned short port1=502;
+unsigned short port2=503;
 /* USER CODE END Variables */
 
 /* Private function prototypes -----------------------------------------------*/
@@ -70,5 +74,14 @@ void vApplicationGetIdleTaskMemory( StaticTask_t **ppxIdleTaskTCBBuffer, StackTy
 
 /* Private application code --------------------------------------------------*/
 /* USER CODE BEGIN Application */
+void task_init()
+{
+	size_t fre = 0;
+	fre=xPortGetFreeHeapSize();
+	sys_thread_new("eth_thread1", ethernet_thread, (void*)&port1, DEFAULT_THREAD_STACKSIZE, osPriorityNormal );
+	fre=xPortGetFreeHeapSize();
+	sys_thread_new("eth_thread2", ethernet_thread, (void*)&port2, DEFAULT_THREAD_STACKSIZE, osPriorityNormal );
+	fre=xPortGetFreeHeapSize();
+}
 
 /* USER CODE END Application */
