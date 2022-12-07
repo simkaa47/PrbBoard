@@ -9,6 +9,7 @@
 #include <stdio.h>
 #include <control_bit.h>
 #include <string.h>
+#include "cmsis_os.h"
 
 static uint16_t *holding_pointer;//Указатель на holding регистры
 static uint16_t *reading_pointer;//Указатель на reading регистры
@@ -17,6 +18,7 @@ static uint16_t reading_size;// Размер reading регистров
 
 extern Settings_Struct settings;
 extern Meas_Data meas_data;
+extern osSemaphoreId writeMemorySemaphoreHandle;
 
 
 static uint8_t CheckRequestLength(uint8_t* request_pointer,int request_length, ModbusSource source);
@@ -32,6 +34,7 @@ static void InsertWordToMemory(uint16_t value, uint8_t* memory);
 static void InsertWordsToMemory(uint16_t *source, uint8_t * destination, uint16_t count);
 static int WriteSingleRegister(uint8_t* request, uint8_t* answer, ModbusSource source);
 static int WrieMultiplyRegisters(uint8_t* request, uint8_t* answer,ModbusSource source);
+static int WriteToHoldings(uint8_t* request, uint8_t* answer,ModbusSource source, int (*write)(uint8_t*,uint8_t*,ModbusSource));
 
 void ModbusInit()
 {
@@ -180,15 +183,16 @@ static uint8_t CheckCrc(uint8_t* request_pointer,int request_length, ModbusSourc
 static int GetModbusAnswer(uint8_t* request, uint8_t* answer, ModbusSource source)
 {
 	uint8_t func_code = source==RS485 ? *(request+1) : *(request+7);
+
 	switch (func_code) {
 		case READ_HOLDING_REGS:
 			return ReadRegisters(request, answer, holding_pointer, holding_size, source);
 		case READ_INPUT_REGS:
 			return ReadRegisters(request, answer, reading_pointer, reading_size, source);
 		case WRITE_SINGLE_REG:
-			return WriteSingleRegister(request, answer, source);
+			return WriteToHoldings(request, answer, source, &WriteSingleRegister);
 		case WRITE_MULTIPLY_REGS:
-			return WrieMultiplyRegisters(request, answer, source);
+			return WriteToHoldings(request, answer, source, &WrieMultiplyRegisters);
 		default:
 			break;
 	}
@@ -281,8 +285,23 @@ static int WrieMultiplyRegisters(uint8_t* request, uint8_t* answer,ModbusSource 
 
     }
     return 0;
-
 }
+
+static int WriteToHoldings(uint8_t* request, uint8_t* answer,ModbusSource source, int (*write)(uint8_t*,uint8_t*,ModbusSource))
+{
+	int result = 0;
+	if(writeMemorySemaphoreHandle!=NULL)
+	{
+		if(osSemaphoreWait(writeMemorySemaphoreHandle, 1000)==osOK)
+		{
+			result =  (*write)(request,answer,source);
+			osSemaphoreRelease(writeMemorySemaphoreHandle);
+		}
+	}
+	return result;
+}
+
+
 
 
 
