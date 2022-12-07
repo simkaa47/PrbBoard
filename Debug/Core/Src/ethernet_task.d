@@ -61,7 +61,7 @@ Core/Src/ethernet_task.o: ../Core/Src/ethernet_task.c \
  ../Middlewares/Third_Party/FreeRTOS/Source/include/queue.h \
  ../Middlewares/Third_Party/FreeRTOS/Source/include/event_groups.h \
  ../Middlewares/Third_Party/FreeRTOS/Source/include/timers.h \
- ../Core/Inc/ethernet.h
+ ../Core/Inc/ethernet.h ../Core/Inc/modbus.h
 
 ../Middlewares/Third_Party/LwIP/src/include/lwip/opt.h:
 
@@ -190,3 +190,5 @@ Core/Src/ethernet_task.o: ../Core/Src/ethernet_task.c \
 ../Middlewares/Third_Party/FreeRTOS/Source/include/timers.h:
 
 ../Core/Inc/ethernet.h:
+
+../Core/Inc/modbus.h:

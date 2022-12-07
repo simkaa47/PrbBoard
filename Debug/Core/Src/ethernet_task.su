@@ -1,1 +1,3 @@
-ethernet_task.c:14:6:ethernet_thread	40	static
+ethernet_task.c:19:6:ethernet_thread	312	static
+ethernet_task.c:65:13:Send	32	static
+ethernet_task.c:82:12:ethernet_answer	32	static

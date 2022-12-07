@@ -1,0 +1,15 @@
+modbus.c:36:6:ModbusInit	4	static
+modbus.c:47:5:ModbusParse	24	static
+modbus.c:65:16:CheckRequestLength	32	static
+modbus.c:73:16:CheckMbAddr	24	static
+modbus.c:88:16:IsCorrectMbCommand	24	static
+modbus.c:117:12:SetInvalidCommand	32	static
+modbus.c:144:13:CRC16_CALC	40	static
+modbus.c:170:16:CheckCrc	32	static
+modbus.c:180:12:GetModbusAnswer	40	static
+modbus.c:199:12:ReadRegisters	32	static
+modbus.c:220:17:GetWordFromBytes	16	static
+modbus.c:230:13:InsertWordToMemory	16	static
+modbus.c:235:13:InsertWordsToMemory	32	static
+modbus.c:246:12:WriteSingleRegister	32	static
+modbus.c:265:12:WrieMultiplyRegisters	32	static

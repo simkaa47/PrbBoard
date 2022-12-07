@@ -10,6 +10,11 @@
 #include "lwip/arch.h"
 #include "lwip/api.h"
 #include <ethernet.h>
+#include <modbus.h>
+#include <string.h>
+
+static int ethernet_answer(uint8_t *data, uint16_t data_length, uint8_t *answer);
+static void Send(struct netconn *conn, uint8_t* pointer, uint16_t size, ip_addr_t *addr, uint16_t port, struct netbuf *buf);
 
 void ethernet_thread(void *arg)
 {
@@ -21,7 +26,9 @@ void ethernet_thread(void *arg)
 	unsigned short client_port;
 	local_port = *((unsigned short*)arg);
 	void* data;
+	uint8_t answer[256];
 	u16_t len;
+	uint16_t answer_len;
 	conn = netconn_new(NETCONN_UDP);
 	if (conn!= NULL)
 	{
@@ -35,8 +42,15 @@ void ethernet_thread(void *arg)
 			  {
 				  client_addr = netbuf_fromaddr(buf);
 				  client_port = netbuf_fromport(buf);
-				  netconn_sendto(conn,buf,client_addr, client_port);
-				  netbuf_delete(buf);
+
+				  netbuf_data(buf, &data, &len);
+				  answer_len = ethernet_answer(data, len, answer);
+				  if(answer_len)
+				  {
+					  Send(conn, answer, answer_len, client_addr, client_port, buf);
+				  }
+				  else netbuf_delete(buf);
+
 			  }
 
 		  }
@@ -48,8 +62,26 @@ void ethernet_thread(void *arg)
 	}
 }
 
-static void ethernet_parse(char *data, uint16_t data_length)
+static void Send(struct netconn *conn, uint8_t* pointer, uint16_t size, ip_addr_t *addr, uint16_t port, struct netbuf *buf)
 {
-
+	u32_t address = addr->addr;
+	netbuf_delete(buf);
+	buf = netbuf_new();
+	buf->port = port;
+	addr->addr = address;
+	err_t err;
+	err  = netbuf_ref(buf, pointer, size);
+	if(err==ERR_OK)
+	{
+		netconn_sendto(conn, buf, addr, port);
+		netbuf_delete(buf);
+	}
 }
 
+//Возвращает кол-во байт для отправки клиенту
+static int ethernet_answer(uint8_t *data, uint16_t data_length, uint8_t *answer)
+{
+	int result = ModbusParse(data, data_length, answer, ETHERNET);
+	if(result)return result;
+	return 0;
+}
