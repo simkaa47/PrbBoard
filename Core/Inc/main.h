@@ -57,6 +57,54 @@ void Error_Handler(void);
 /* USER CODE END EFP */
 
 /* Private defines -----------------------------------------------------------*/
+#define DIN_4_Pin GPIO_PIN_2
+#define DIN_4_GPIO_Port GPIOE
+#define DIN_5_Pin GPIO_PIN_3
+#define DIN_5_GPIO_Port GPIOE
+#define DIN_6_Pin GPIO_PIN_4
+#define DIN_6_GPIO_Port GPIOE
+#define DIN_7_Pin GPIO_PIN_5
+#define DIN_7_GPIO_Port GPIOE
+#define DIN_8_Pin GPIO_PIN_6
+#define DIN_8_GPIO_Port GPIOE
+#define DIN_9_Pin GPIO_PIN_13
+#define DIN_9_GPIO_Port GPIOC
+#define DIN_10_Pin GPIO_PIN_14
+#define DIN_10_GPIO_Port GPIOC
+#define DIN_11_Pin GPIO_PIN_15
+#define DIN_11_GPIO_Port GPIOC
+#define DOUT_0_Pin GPIO_PIN_7
+#define DOUT_0_GPIO_Port GPIOE
+#define DOUT_1_Pin GPIO_PIN_8
+#define DOUT_1_GPIO_Port GPIOE
+#define DOUT_2_Pin GPIO_PIN_9
+#define DOUT_2_GPIO_Port GPIOE
+#define DOUT_3_Pin GPIO_PIN_10
+#define DOUT_3_GPIO_Port GPIOE
+#define DOUT_4_Pin GPIO_PIN_11
+#define DOUT_4_GPIO_Port GPIOE
+#define DOUT_5_Pin GPIO_PIN_12
+#define DOUT_5_GPIO_Port GPIOE
+#define DOUT_6_Pin GPIO_PIN_13
+#define DOUT_6_GPIO_Port GPIOE
+#define DOUT_7_Pin GPIO_PIN_14
+#define DOUT_7_GPIO_Port GPIOE
+#define DOUT_8_Pin GPIO_PIN_15
+#define DOUT_8_GPIO_Port GPIOE
+#define DOUT_9_Pin GPIO_PIN_10
+#define DOUT_9_GPIO_Port GPIOB
+#define DOUT_10_Pin GPIO_PIN_8
+#define DOUT_10_GPIO_Port GPIOD
+#define DOUT_11_Pin GPIO_PIN_9
+#define DOUT_11_GPIO_Port GPIOD
+#define DIN_0_Pin GPIO_PIN_8
+#define DIN_0_GPIO_Port GPIOB
+#define DIN_1_Pin GPIO_PIN_9
+#define DIN_1_GPIO_Port GPIOB
+#define DIN_2_Pin GPIO_PIN_0
+#define DIN_2_GPIO_Port GPIOE
+#define DIN_3_Pin GPIO_PIN_1
+#define DIN_3_GPIO_Port GPIOE
 /* USER CODE BEGIN Private defines */
 
 /* USER CODE END Private defines */

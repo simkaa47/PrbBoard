@@ -114,7 +114,19 @@ void HAL_UART_MspInit(UART_HandleTypeDef* huart)
 
   /* USER CODE END USART1_MspInit 1 */
   }
-  else if(huart->Instance==USART6)
+
+}
+
+/**
+* @brief USART MSP Initialization
+* This function configures the hardware resources used in this example
+* @param husart: USART handle pointer
+* @retval None
+*/
+void HAL_USART_MspInit(USART_HandleTypeDef* husart)
+{
+  GPIO_InitTypeDef GPIO_InitStruct = {0};
+  if(husart->Instance==USART6)
   {
   /* USER CODE BEGIN USART6_MspInit 0 */
 
@@ -126,8 +138,9 @@ void HAL_UART_MspInit(UART_HandleTypeDef* huart)
     /**USART6 GPIO Configuration
     PC6     ------> USART6_TX
     PC7     ------> USART6_RX
+    PC8     ------> USART6_CK
     */
-    GPIO_InitStruct.Pin = GPIO_PIN_6|GPIO_PIN_7;
+    GPIO_InitStruct.Pin = GPIO_PIN_6|GPIO_PIN_7|GPIO_PIN_8;
     GPIO_InitStruct.Mode = GPIO_MODE_AF_PP;
     GPIO_InitStruct.Pull = GPIO_NOPULL;
     GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_VERY_HIGH;
@@ -172,7 +185,18 @@ void HAL_UART_MspDeInit(UART_HandleTypeDef* huart)
 
   /* USER CODE END USART1_MspDeInit 1 */
   }
-  else if(huart->Instance==USART6)
+
+}
+
+/**
+* @brief USART MSP De-Initialization
+* This function freeze the hardware resources used in this example
+* @param husart: USART handle pointer
+* @retval None
+*/
+void HAL_USART_MspDeInit(USART_HandleTypeDef* husart)
+{
+  if(husart->Instance==USART6)
   {
   /* USER CODE BEGIN USART6_MspDeInit 0 */
 
@@ -183,8 +207,9 @@ void HAL_UART_MspDeInit(UART_HandleTypeDef* huart)
     /**USART6 GPIO Configuration
     PC6     ------> USART6_TX
     PC7     ------> USART6_RX
+    PC8     ------> USART6_CK
     */
-    HAL_GPIO_DeInit(GPIOC, GPIO_PIN_6|GPIO_PIN_7);
+    HAL_GPIO_DeInit(GPIOC, GPIO_PIN_6|GPIO_PIN_7|GPIO_PIN_8);
 
     /* USART6 interrupt DeInit */
     HAL_NVIC_DisableIRQ(USART6_IRQn);
