@@ -26,6 +26,7 @@
 #include <task_init.h>
 #include <modbus.h>
 #include <settings.h>
+#include <main_process.h>
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -44,7 +45,8 @@
 
 /* Private variables ---------------------------------------------------------*/
 UART_HandleTypeDef huart1;
-USART_HandleTypeDef husart6;
+UART_HandleTypeDef huart6;
+DMA_HandleTypeDef hdma_usart1_rx;
 
 osThreadId defaultTaskHandle;
 osSemaphoreId writeMemorySemaphoreHandle;
@@ -56,7 +58,8 @@ extern Meas_Data meas_data;
 void SystemClock_Config(void);
 static void MX_GPIO_Init(void);
 static void MX_USART1_UART_Init(void);
-static void MX_USART6_Init(void);
+static void MX_DMA_Init(void);
+static void MX_USART6_UART_Init(void);
 void StartDefaultTask(void const * argument);
 
 /* USER CODE BEGIN PFP */
@@ -97,7 +100,8 @@ int main(void)
   /* Initialize all configured peripherals */
   MX_GPIO_Init();
   MX_USART1_UART_Init();
-  MX_USART6_Init();
+  MX_DMA_Init();
+  MX_USART6_UART_Init();
   /* USER CODE BEGIN 2 */
 
   /* USER CODE END 2 */
@@ -209,7 +213,7 @@ static void MX_USART1_UART_Init(void)
   /* USER CODE END USART1_Init 1 */
   huart1.Instance = USART1;
   huart1.Init.BaudRate = 9600;
-  huart1.Init.WordLength = UART_WORDLENGTH_9B;
+  huart1.Init.WordLength = UART_WORDLENGTH_8B;
   huart1.Init.StopBits = UART_STOPBITS_1;
   huart1.Init.Parity = UART_PARITY_NONE;
   huart1.Init.Mode = UART_MODE_TX_RX;
@@ -230,7 +234,7 @@ static void MX_USART1_UART_Init(void)
   * @param None
   * @retval None
   */
-static void MX_USART6_Init(void)
+static void MX_USART6_UART_Init(void)
 {
 
   /* USER CODE BEGIN USART6_Init 0 */
@@ -240,22 +244,37 @@ static void MX_USART6_Init(void)
   /* USER CODE BEGIN USART6_Init 1 */
 
   /* USER CODE END USART6_Init 1 */
-  husart6.Instance = USART6;
-  husart6.Init.BaudRate = 9600;
-  husart6.Init.WordLength = USART_WORDLENGTH_9B;
-  husart6.Init.StopBits = USART_STOPBITS_1;
-  husart6.Init.Parity = USART_PARITY_NONE;
-  husart6.Init.Mode = USART_MODE_TX_RX;
-  husart6.Init.CLKPolarity = USART_POLARITY_LOW;
-  husart6.Init.CLKPhase = USART_PHASE_1EDGE;
-  husart6.Init.CLKLastBit = USART_LASTBIT_DISABLE;
-  if (HAL_USART_Init(&husart6) != HAL_OK)
+  huart6.Instance = USART6;
+  huart6.Init.BaudRate = 9600;
+  huart6.Init.WordLength = UART_WORDLENGTH_8B;
+  huart6.Init.StopBits = UART_STOPBITS_1;
+  huart6.Init.Parity = UART_PARITY_NONE;
+  huart6.Init.Mode = UART_MODE_TX_RX;
+  huart6.Init.HwFlowCtl = UART_HWCONTROL_NONE;
+  huart6.Init.OverSampling = UART_OVERSAMPLING_16;
+  if (HAL_UART_Init(&huart6) != HAL_OK)
   {
     Error_Handler();
   }
   /* USER CODE BEGIN USART6_Init 2 */
-
+  HAL_UART_Receive_IT(&huart6, (uint8_t*)meas_data.data, 1);
   /* USER CODE END USART6_Init 2 */
+
+}
+
+/**
+  * Enable DMA controller clock
+  */
+static void MX_DMA_Init(void)
+{
+
+  /* DMA controller clock enable */
+  __HAL_RCC_DMA2_CLK_ENABLE();
+
+  /* DMA interrupt init */
+  /* DMA2_Stream2_IRQn interrupt configuration */
+  HAL_NVIC_SetPriority(DMA2_Stream2_IRQn, 5, 0);
+  HAL_NVIC_EnableIRQ(DMA2_Stream2_IRQn);
 
 }
 
@@ -286,6 +305,9 @@ static void MX_GPIO_Init(void)
 
   /*Configure GPIO pin Output Level */
   HAL_GPIO_WritePin(GPIOD, DOUT_10_Pin|DOUT_11_Pin, GPIO_PIN_RESET);
+
+  /*Configure GPIO pin Output Level */
+  HAL_GPIO_WritePin(RS485_TX_GPIO_Port, RS485_TX_Pin, GPIO_PIN_RESET);
 
   /*Configure GPIO pins : DIN_4_Pin DIN_5_Pin DIN_6_Pin DIN_7_Pin
                            DIN_8_Pin DIN_2_Pin DIN_3_Pin */
@@ -326,6 +348,13 @@ static void MX_GPIO_Init(void)
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
   HAL_GPIO_Init(GPIOD, &GPIO_InitStruct);
 
+  /*Configure GPIO pin : RS485_TX_Pin */
+  GPIO_InitStruct.Pin = RS485_TX_Pin;
+  GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
+  GPIO_InitStruct.Pull = GPIO_NOPULL;
+  GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
+  HAL_GPIO_Init(RS485_TX_GPIO_Port, &GPIO_InitStruct);
+
   /*Configure GPIO pins : DIN_0_Pin DIN_1_Pin */
   GPIO_InitStruct.Pin = DIN_0_Pin|DIN_1_Pin;
   GPIO_InitStruct.Mode = GPIO_MODE_INPUT;
@@ -354,6 +383,7 @@ void StartDefaultTask(void const * argument)
   /* Infinite loop */
   for(;;)
   {
+	main_process();
     osDelay(1);
   }
   /* USER CODE END 5 */

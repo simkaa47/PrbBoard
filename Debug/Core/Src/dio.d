@@ -1,5 +1,4 @@
-Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_usart.o: \
- ../Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_usart.c \
+Core/Src/dio.o: ../Core/Src/dio.c ../Core/Inc/main.h \
  ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal.h \
  ../Core/Inc/stm32f4xx_hal_conf.h \
  ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_rcc.h \
@@ -29,7 +28,9 @@ Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_usart.o: \
  ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_tim.h \
  ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_tim_ex.h \
  ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_uart.h \
- ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_usart.h
+ ../Core/Inc/settings.h
+
+../Core/Inc/main.h:
 
 ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal.h:
 
@@ -89,4 +90,4 @@ Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_usart.o: \
 
 ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_uart.h:
 
-../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_usart.h:
+../Core/Inc/settings.h:

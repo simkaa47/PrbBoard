@@ -97,6 +97,8 @@ void Error_Handler(void);
 #define DOUT_10_GPIO_Port GPIOD
 #define DOUT_11_Pin GPIO_PIN_9
 #define DOUT_11_GPIO_Port GPIOD
+#define RS485_TX_Pin GPIO_PIN_8
+#define RS485_TX_GPIO_Port GPIOC
 #define DIN_0_Pin GPIO_PIN_8
 #define DIN_0_GPIO_Port GPIOB
 #define DIN_1_Pin GPIO_PIN_9
