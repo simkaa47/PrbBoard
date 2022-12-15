@@ -21,12 +21,14 @@
 #include "cmsis_os.h"
 #include "lwip.h"
 
+
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
 #include <task_init.h>
 #include <modbus.h>
 #include <settings.h>
 #include <main_process.h>
+#include <lcd.h>
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -103,7 +105,11 @@ int main(void)
   MX_DMA_Init();
   MX_USART6_UART_Init();
   /* USER CODE BEGIN 2 */
-
+  lcd_init();
+  sendStr("HELLO, KONVELS",1,0);
+  sendStr("powered by", 2,0);
+  sendStr("STM32F407VG",3,0);
+  sendStr("zalupa", 4,0);
   /* USER CODE END 2 */
 
   /* USER CODE BEGIN RTOS_MUTEX */
@@ -296,12 +302,14 @@ static void MX_GPIO_Init(void)
   __HAL_RCC_GPIOD_CLK_ENABLE();
 
   /*Configure GPIO pin Output Level */
+  HAL_GPIO_WritePin(GPIOB, LCD0_Pin|LCD1_Pin|LCD2_Pin|DOUT_9_Pin
+                          |LED_Pin|LCDLED_Pin|LCD3_Pin|LCDR_Pin
+                          |LCDE_Pin|LCDA_Pin, GPIO_PIN_RESET);
+
+  /*Configure GPIO pin Output Level */
   HAL_GPIO_WritePin(GPIOE, DOUT_0_Pin|DOUT_1_Pin|DOUT_2_Pin|DOUT_3_Pin
                           |DOUT_4_Pin|DOUT_5_Pin|DOUT_6_Pin|DOUT_7_Pin
                           |DOUT_8_Pin, GPIO_PIN_RESET);
-
-  /*Configure GPIO pin Output Level */
-  HAL_GPIO_WritePin(DOUT_9_GPIO_Port, DOUT_9_Pin, GPIO_PIN_RESET);
 
   /*Configure GPIO pin Output Level */
   HAL_GPIO_WritePin(GPIOD, DOUT_10_Pin|DOUT_11_Pin, GPIO_PIN_RESET);
@@ -323,6 +331,17 @@ static void MX_GPIO_Init(void)
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   HAL_GPIO_Init(GPIOC, &GPIO_InitStruct);
 
+  /*Configure GPIO pins : LCD0_Pin LCD1_Pin LCD2_Pin DOUT_9_Pin
+                           LED_Pin LCDLED_Pin LCD3_Pin LCDR_Pin
+                           LCDE_Pin LCDA_Pin */
+  GPIO_InitStruct.Pin = LCD0_Pin|LCD1_Pin|LCD2_Pin|DOUT_9_Pin
+                          |LED_Pin|LCDLED_Pin|LCD3_Pin|LCDR_Pin
+                          |LCDE_Pin|LCDA_Pin;
+  GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
+  GPIO_InitStruct.Pull = GPIO_NOPULL;
+  GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
+  HAL_GPIO_Init(GPIOB, &GPIO_InitStruct);
+
   /*Configure GPIO pins : DOUT_0_Pin DOUT_1_Pin DOUT_2_Pin DOUT_3_Pin
                            DOUT_4_Pin DOUT_5_Pin DOUT_6_Pin DOUT_7_Pin
                            DOUT_8_Pin */
@@ -333,13 +352,6 @@ static void MX_GPIO_Init(void)
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
   HAL_GPIO_Init(GPIOE, &GPIO_InitStruct);
-
-  /*Configure GPIO pin : DOUT_9_Pin */
-  GPIO_InitStruct.Pin = DOUT_9_Pin;
-  GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
-  GPIO_InitStruct.Pull = GPIO_NOPULL;
-  GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
-  HAL_GPIO_Init(DOUT_9_GPIO_Port, &GPIO_InitStruct);
 
   /*Configure GPIO pins : DOUT_10_Pin DOUT_11_Pin */
   GPIO_InitStruct.Pin = DOUT_10_Pin|DOUT_11_Pin;

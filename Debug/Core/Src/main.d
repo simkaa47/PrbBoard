@@ -81,7 +81,7 @@ Core/Src/main.o: ../Core/Src/main.c ../Core/Inc/main.h \
  ../LWIP/Target/ethernetif.h \
  ../Middlewares/Third_Party/LwIP/src/include/lwip/tcpip.h \
  ../Core/Inc/task_init.h ../Core/Inc/modbus.h ../Core/Inc/settings.h \
- ../Core/Inc/main_process.h
+ ../Core/Inc/main_process.h ../Core/Inc/lcd.h
 
 ../Core/Inc/main.h:
 
@@ -254,3 +254,5 @@ Core/Src/main.o: ../Core/Src/main.c ../Core/Inc/main.h \
 ../Core/Inc/settings.h:
 
 ../Core/Inc/main_process.h:
+
+../Core/Inc/lcd.h:

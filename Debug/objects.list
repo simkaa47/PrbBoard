@@ -2,6 +2,7 @@
 "./Core/Src/dio.o"
 "./Core/Src/ethernet_task.o"
 "./Core/Src/freertos.o"
+"./Core/Src/lcd.o"
 "./Core/Src/main.o"
 "./Core/Src/main_process.o"
 "./Core/Src/modbus.o"
