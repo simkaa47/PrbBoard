@@ -29,6 +29,7 @@
 #include <settings.h>
 #include <main_process.h>
 #include <lcd.h>
+
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -53,7 +54,7 @@ DMA_HandleTypeDef hdma_usart1_rx;
 osThreadId defaultTaskHandle;
 osSemaphoreId writeMemorySemaphoreHandle;
 /* USER CODE BEGIN PV */
-extern Meas_Data meas_data;
+
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
@@ -230,7 +231,7 @@ static void MX_USART1_UART_Init(void)
     Error_Handler();
   }
   /* USER CODE BEGIN USART1_Init 2 */
-  HAL_UART_Receive_IT(&huart1, (uint8_t*)meas_data.data, 1);
+
   /* USER CODE END USART1_Init 2 */
 
 }
@@ -263,7 +264,7 @@ static void MX_USART6_UART_Init(void)
     Error_Handler();
   }
   /* USER CODE BEGIN USART6_Init 2 */
-  HAL_UART_Receive_IT(&huart6, (uint8_t*)meas_data.data, 1);
+  StartReciveUart(&huart6);
   /* USER CODE END USART6_Init 2 */
 
 }
@@ -392,6 +393,7 @@ void StartDefaultTask(void const * argument)
   MX_LWIP_Init();
   /* USER CODE BEGIN 5 */
   task_init();
+
   /* Infinite loop */
   for(;;)
   {

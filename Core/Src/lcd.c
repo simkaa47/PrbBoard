@@ -16,25 +16,28 @@ static void sendByte(uint8_t byte, int isData);
 
 void lcd_init()
 {
-	HAL_Delay(15000);
+	HAL_GPIO_WritePin(LCDLED_GPIO_Port, LCDLED_Pin, SET);// Включаем подсветку
+	HAL_GPIO_WritePin(LCDR_GPIO_Port, LCDR_Pin, RESET);
+	HAL_Delay(15);
+
 	sendByte(0x33, 0); // шлем в одном байте два 0011
-	HAL_Delay(100);
+	HAL_Delay(1);
 
 	sendByte(0x32, 0); // шлем в одном байте  00110010
-	HAL_Delay(40);
+	HAL_Delay(1);
 
 	sendByte(DATA_BUS_4BIT_PAGE0, 0); // включаем режим 4 бит
-	HAL_Delay(40);
+	HAL_Delay(1);
 	sendByte(DISPLAY_OFF, 0); // выключаем дисплей
-	HAL_Delay(40);
+	HAL_Delay(1);
 	sendByte(CLEAR_DISPLAY, 0); // очищаем дисплей
-	HAL_Delay(2000);
+	HAL_Delay(2);
 	sendByte(ENTRY_MODE_SET, 0); //ставим режим смещение курсора экран не смещается
-	HAL_Delay(40);
+	HAL_Delay(1);
 	sendByte(DISPLAY_ON, 0);// включаем дисплей и убираем курсор
-	HAL_Delay(40);
+	HAL_Delay(1);
 
-	HAL_GPIO_WritePin(LCDLED_GPIO_Port, LCDLED_Pin, SET);// Включаем подсветку
+
 
 }
 
@@ -61,10 +64,13 @@ static void sendByte(uint8_t byte, int isData)
 
 	// поднимаем пин E
 	HAL_GPIO_WritePin(LCDE_GPIO_Port, LCDE_Pin, SET);
-	HAL_Delay(1);
+	if(byte & 0x08) HAL_GPIO_WritePin(LCD3_GPIO_Port, LCD3_Pin, SET);
+	if(byte & 0x04) HAL_GPIO_WritePin(LCD2_GPIO_Port, LCD2_Pin, SET);
+	if(byte & 0x02) HAL_GPIO_WritePin(LCD1_GPIO_Port, LCD1_Pin, SET);
+	if(byte & 0x01) HAL_GPIO_WritePin(LCD0_GPIO_Port, LCD0_Pin, SET);
 	HAL_GPIO_WritePin(LCDE_GPIO_Port, LCDE_Pin, RESET); // сбрасываем пин Е
 
-	HAL_Delay(40);
+	HAL_Delay(1);
 }
 
 
@@ -97,7 +103,7 @@ void sendStr( char *str, int row , int position )
 
 	sendByte((start_address |= SET_DDRAM_ADDRESS), 0); // ставим курсор на начало нужной строки  в DDRAM
 
-	HAL_Delay(4000);
+	HAL_Delay(4);
 	while(*str != '\0'){
 
 		sendByte(*str, 1);
