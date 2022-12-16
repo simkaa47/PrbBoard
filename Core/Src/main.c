@@ -107,7 +107,7 @@ int main(void)
   MX_DMA_Init();
   MX_USART6_UART_Init();
   /* USER CODE BEGIN 2 */
-  StartReciveUart();
+  StartReciveUartAll();
   lcd_init();
   sendStr("HELLO, KONVELS",1,0);
   sendStr("powered by", 2,0);

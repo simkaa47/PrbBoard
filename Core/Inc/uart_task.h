@@ -14,6 +14,6 @@
 
 
 
-void StartReciveUart();
+void StartReciveUartAll();
 
 #endif /* INC_UART_TASK_H_ */
