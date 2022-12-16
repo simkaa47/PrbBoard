@@ -21,7 +21,6 @@
 #include "cmsis_os.h"
 #include "lwip.h"
 
-
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
 #include <task_init.h>
@@ -29,6 +28,7 @@
 #include <settings.h>
 #include <main_process.h>
 #include <lcd.h>
+#include <uart_task.h>
 
 /* USER CODE END Includes */
 
@@ -50,6 +50,7 @@
 UART_HandleTypeDef huart1;
 UART_HandleTypeDef huart6;
 DMA_HandleTypeDef hdma_usart1_rx;
+DMA_HandleTypeDef hdma_usart6_rx;
 
 osThreadId defaultTaskHandle;
 osSemaphoreId writeMemorySemaphoreHandle;
@@ -106,6 +107,7 @@ int main(void)
   MX_DMA_Init();
   MX_USART6_UART_Init();
   /* USER CODE BEGIN 2 */
+  StartReciveUart();
   lcd_init();
   sendStr("HELLO, KONVELS",1,0);
   sendStr("powered by", 2,0);
@@ -264,7 +266,7 @@ static void MX_USART6_UART_Init(void)
     Error_Handler();
   }
   /* USER CODE BEGIN USART6_Init 2 */
-  StartReciveUart(&huart6);
+
   /* USER CODE END USART6_Init 2 */
 
 }
@@ -279,6 +281,9 @@ static void MX_DMA_Init(void)
   __HAL_RCC_DMA2_CLK_ENABLE();
 
   /* DMA interrupt init */
+  /* DMA2_Stream1_IRQn interrupt configuration */
+  HAL_NVIC_SetPriority(DMA2_Stream1_IRQn, 5, 0);
+  HAL_NVIC_EnableIRQ(DMA2_Stream1_IRQn);
   /* DMA2_Stream2_IRQn interrupt configuration */
   HAL_NVIC_SetPriority(DMA2_Stream2_IRQn, 5, 0);
   HAL_NVIC_EnableIRQ(DMA2_Stream2_IRQn);

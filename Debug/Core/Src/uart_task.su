@@ -1,3 +1,2 @@
-../Core/Src/uart_task.c:22:6:HAL_UART_RxCpltCallback	24	static
-../Core/Src/uart_task.c:33:6:StartReciveUart	16	static
-../Core/Src/uart_task.c:41:13:RecognizePacket	16	static
+uart_task.c:26:6:StartReciveUart	8	static
+uart_task.c:35:13:RecognizePacket	16	static

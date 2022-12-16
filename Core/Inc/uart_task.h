@@ -12,23 +12,8 @@
 #define UART_OUTPUT_BUFFER_SZ 256
 
 
-typedef struct
-{
-	struct
-	{
-		uint8_t state;
-		uint8_t bytes_rcvd;
-		uint8_t bytes_req;
-		uint32_t symbol_tmr_ms;
-		uint8_t data[UART_INPUT_BUFFER_SZ];
-	} RX;
-	struct
-	{
-		uint8_t bytes_req;
-		uint8_t data[UART_OUTPUT_BUFFER_SZ];
-	} TX;
-}Uart_Buffer;
 
-void StartReciveUart(UART_HandleTypeDef *huart);
+
+void StartReciveUart();
 
 #endif /* INC_UART_TASK_H_ */

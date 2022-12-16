@@ -9,33 +9,27 @@
 #include <uart_task.h>
 
 
-uint8_t uart_input_buffer[2][20];
-Uart_Buffer uart_packets[2];
+uint8_t uart_input_buffer[2][UART_INPUT_BUFFER_SZ];
 
 
-extern UART_HandleTypeDef huart6;
+
 extern UART_HandleTypeDef huart1;
+extern UART_HandleTypeDef huart6;
+extern DMA_HandleTypeDef hdma_usart1_rx;
+extern DMA_HandleTypeDef hdma_usart6_rx;
 
 static void RecognizePacket(int index, int bytes_count);
 
 
-void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart)
-{
-	int index = 0;
-	if (huart == &huart6) {
-		index = 1;
-	}
-	else return;
-	RecognizePacket(index,1);
-	StartReciveUart(huart);
-}
 
-void StartReciveUart(UART_HandleTypeDef *huart)
+
+void StartReciveUart()
 {
-	if (huart == &huart6) {
-		HAL_UART_Receive_IT(huart, uart_input_buffer[1], 1);
-	}
-	return;
+
+
+
+	HAL_UARTEx_ReceiveToIdle_DMA(&huart6, uart_input_buffer[1], UART_INPUT_BUFFER_SZ);
+	__HAL_DMA_DISABLE_IT(&hdma_usart6_rx,DMA_IT_HT);
 }
 
 static void RecognizePacket(int index, int bytes_count)
