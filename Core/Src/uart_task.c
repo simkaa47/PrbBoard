@@ -4,9 +4,9 @@
  *  Created on: 12 дек. 2022 г.
  *      Author: Serafim
  */
-#include <main.h>
 #include <settings.h>
 #include <uart_task.h>
+#include <modbus.h>
 
 
 uint8_t uart_input_buffer[2][UART_INPUT_BUFFER_SZ];
@@ -20,10 +20,20 @@ extern DMA_HandleTypeDef hdma_usart6_rx;
 
 static void RecognizePacket(int index, int bytes_count);
 static void StartReceive(int index);
+static void StartReciveUartAll();
 
 
+void uart_thread(void *argument)
+{
+	StartReciveUartAll();
+	while(1)
+	{
 
-void StartReciveUartAll()
+	}
+}
+
+
+static void StartReciveUartAll()
 {
 	for (int i = 0; i < 2; ++i) {
 		StartReceive(i);

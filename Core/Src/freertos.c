@@ -26,8 +26,10 @@
 /* USER CODE BEGIN Includes */
 #include <task_init.h>
 #include <ethernet.h>
+#include <uart_task.h>
 #include <cmsis_os.h>
 #include <lwip.h>
+
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -49,6 +51,7 @@
 /* USER CODE BEGIN Variables */
 unsigned short port1=502;
 unsigned short port2=503;
+osMailQId uart_queue; // Id очереди для uart_task
 /* USER CODE END Variables */
 
 /* Private function prototypes -----------------------------------------------*/
@@ -82,6 +85,10 @@ void task_init()
 	fre=xPortGetFreeHeapSize();
 	sys_thread_new("eth_thread2", ethernet_thread, (void*)&port2, DEFAULT_THREAD_STACKSIZE, osPriorityNormal );
 	fre=xPortGetFreeHeapSize();
+	sys_thread_new("uart_thread", uart_thread, (void*)NULL, 512, osPriorityNormal );
+	fre=xPortGetFreeHeapSize();
+	osMailQDef(uart_queue, UART_QUEUE_SIZE, Uart_Queue_Struct);
+	uart_queue = osMailCreate(osMailQ(uart_queue), NULL);
 }
 
 /* USER CODE END Application */

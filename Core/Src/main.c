@@ -107,12 +107,11 @@ int main(void)
   MX_DMA_Init();
   MX_USART6_UART_Init();
   /* USER CODE BEGIN 2 */
-  StartReciveUartAll();
   lcd_init();
   sendStr("HELLO, KONVELS",1,0);
-  sendStr("powered by", 2,0);
+  sendStr("POWERED BY", 2,0);
   sendStr("STM32F407VG",3,0);
-  sendStr("zalupa", 4,0);
+  sendStr("I AM ROBOT", 4,0);
   /* USER CODE END 2 */
 
   /* USER CODE BEGIN RTOS_MUTEX */
