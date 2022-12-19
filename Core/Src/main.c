@@ -29,6 +29,7 @@
 #include <main_process.h>
 #include <lcd.h>
 #include <uart_task.h>
+#include <ethernet.h>
 
 /* USER CODE END Includes */
 
@@ -108,6 +109,7 @@ int main(void)
   MX_USART6_UART_Init();
   /* USER CODE BEGIN 2 */
   lcd_init();
+  ethernet_reset();
   sendStr("HELLO, KONVELS",1,0);
   sendStr("POWERED BY", 2,0);
   sendStr("STM32F407VG",3,0);
@@ -308,7 +310,7 @@ static void MX_GPIO_Init(void)
   __HAL_RCC_GPIOD_CLK_ENABLE();
 
   /*Configure GPIO pin Output Level */
-  HAL_GPIO_WritePin(GPIOA, GPIO_PIN_0, GPIO_PIN_RESET);
+  HAL_GPIO_WritePin(ERESET_GPIO_Port, ERESET_Pin, GPIO_PIN_RESET);
 
   /*Configure GPIO pin Output Level */
   HAL_GPIO_WritePin(GPIOB, LCD0_Pin|LCD1_Pin|LCD2_Pin|DOUT_9_Pin
@@ -340,12 +342,12 @@ static void MX_GPIO_Init(void)
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   HAL_GPIO_Init(GPIOC, &GPIO_InitStruct);
 
-  /*Configure GPIO pin : PA0 */
-  GPIO_InitStruct.Pin = GPIO_PIN_0;
+  /*Configure GPIO pin : ERESET_Pin */
+  GPIO_InitStruct.Pin = ERESET_Pin;
   GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
-  HAL_GPIO_Init(GPIOA, &GPIO_InitStruct);
+  HAL_GPIO_Init(ERESET_GPIO_Port, &GPIO_InitStruct);
 
   /*Configure GPIO pins : LCD0_Pin LCD1_Pin LCD2_Pin DOUT_9_Pin
                            LED_Pin LCDLED_Pin LCD3_Pin LCDR_Pin

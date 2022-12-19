@@ -16,6 +16,13 @@
 static int ethernet_answer(uint8_t *data, uint16_t data_length, uint8_t *answer);
 static void Send(struct netconn *conn, uint8_t* pointer, uint16_t size, ip_addr_t *addr, uint16_t port, struct netbuf *buf);
 
+void ethernet_reset()
+{
+	HAL_GPIO_WritePin(ERESET_GPIO_Port, ERESET_Pin, RESET);
+	HAL_Delay(100);
+	HAL_GPIO_WritePin(ERESET_GPIO_Port, ERESET_Pin, SET);
+}
+
 void ethernet_thread(void *arg)
 {
 	err_t err, recv_err;

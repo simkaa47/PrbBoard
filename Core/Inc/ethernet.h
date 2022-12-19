@@ -9,6 +9,7 @@
 #define INC_ETHERNET_H_
 
 void ethernet_thread(void *arg);
+void ethernet_reset();
 
 
 #endif /* INC_ETHERNET_H_ */
