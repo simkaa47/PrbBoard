@@ -73,8 +73,6 @@ void Error_Handler(void);
 #define DIN_10_GPIO_Port GPIOC
 #define DIN_11_Pin GPIO_PIN_15
 #define DIN_11_GPIO_Port GPIOC
-#define ERESET_Pin GPIO_PIN_0
-#define ERESET_GPIO_Port GPIOA
 #define LCD0_Pin GPIO_PIN_0
 #define LCD0_GPIO_Port GPIOB
 #define LCD1_Pin GPIO_PIN_1
