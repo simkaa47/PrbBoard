@@ -337,6 +337,12 @@ static void MX_GPIO_Init(void)
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   HAL_GPIO_Init(GPIOC, &GPIO_InitStruct);
 
+  /*Configure GPIO pin : ERESET_Pin */
+  GPIO_InitStruct.Pin = ERESET_Pin;
+  GPIO_InitStruct.Mode = GPIO_MODE_ANALOG;
+  GPIO_InitStruct.Pull = GPIO_NOPULL;
+  HAL_GPIO_Init(ERESET_GPIO_Port, &GPIO_InitStruct);
+
   /*Configure GPIO pins : LCD0_Pin LCD1_Pin LCD2_Pin DOUT_9_Pin
                            LED_Pin LCDLED_Pin LCD3_Pin LCDR_Pin
                            LCDE_Pin LCDA_Pin */
