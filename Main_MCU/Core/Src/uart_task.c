@@ -62,12 +62,16 @@ static void StartReceive(int index)
 {
 	switch (index) {
 		case 0:
-			HAL_UARTEx_ReceiveToIdle_DMA(&huart1, uart_input_buffer[0], UART_INPUT_BUFFER_SZ);
-			__HAL_DMA_DISABLE_IT(&hdma_usart1_rx,DMA_IT_HT);
+			if (huart1.hdmarx->State==HAL_DMA_STATE_READY) {
+				HAL_UARTEx_ReceiveToIdle_DMA(&huart1, uart_input_buffer[0], UART_INPUT_BUFFER_SZ);
+				__HAL_DMA_DISABLE_IT(&hdma_usart1_rx,DMA_IT_HT);
+			}
 			break;
 		case 1:
-			HAL_UARTEx_ReceiveToIdle_DMA(&huart6, uart_input_buffer[1], UART_INPUT_BUFFER_SZ);
-			__HAL_DMA_DISABLE_IT(&hdma_usart6_rx,DMA_IT_HT);
+			if(huart6.hdmarx->State==HAL_DMA_STATE_READY){
+				HAL_UARTEx_ReceiveToIdle_DMA(&huart6, uart_input_buffer[1], UART_INPUT_BUFFER_SZ);
+				__HAL_DMA_DISABLE_IT(&hdma_usart6_rx,DMA_IT_HT);
+			}
 			break;
 		default:
 			break;
