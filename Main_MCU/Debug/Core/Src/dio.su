@@ -1,0 +1,2 @@
+../Core/Src/dio.c:14:6:Read_Inputs	8	static
+../Core/Src/dio.c:30:6:Write_Outputs	8	static

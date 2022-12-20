@@ -1,5 +1,0 @@
-uart_task.c:26:6:uart_thread	16	static
-uart_task.c:36:13:StartReciveUartAll	16	static
-uart_task.c:44:13:StartReceive	16	static
-uart_task.c:60:6:HAL_UARTEx_RxEventCallback	16	static
-uart_task.c:72:13:RecognizePacket	16	static

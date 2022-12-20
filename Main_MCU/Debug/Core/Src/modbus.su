@@ -1,0 +1,16 @@
+../Core/Src/modbus.c:39:6:ModbusInit	4	static
+../Core/Src/modbus.c:50:5:ModbusParse	24	static
+../Core/Src/modbus.c:68:16:CheckRequestLength	32	static
+../Core/Src/modbus.c:76:16:CheckMbAddr	24	static
+../Core/Src/modbus.c:91:16:IsCorrectMbCommand	24	static
+../Core/Src/modbus.c:120:12:SetInvalidCommand	32	static
+../Core/Src/modbus.c:147:13:CRC16_CALC	40	static
+../Core/Src/modbus.c:173:16:CheckCrc	32	static
+../Core/Src/modbus.c:183:12:GetModbusAnswer	40	static
+../Core/Src/modbus.c:203:12:ReadRegisters	40	static
+../Core/Src/modbus.c:233:17:GetWordFromBytes	16	static
+../Core/Src/modbus.c:243:13:InsertWordToMemory	16	static
+../Core/Src/modbus.c:248:13:InsertWordsToMemory	32	static
+../Core/Src/modbus.c:259:12:WriteSingleRegister	32	static
+../Core/Src/modbus.c:280:12:WrieMultiplyRegisters	32	static
+../Core/Src/modbus.c:307:12:WriteToHoldings	32	static
