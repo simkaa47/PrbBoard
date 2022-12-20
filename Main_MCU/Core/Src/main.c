@@ -333,13 +333,13 @@ static void MX_GPIO_Init(void)
   GPIO_InitStruct.Pin = DIN_4_Pin|DIN_5_Pin|DIN_6_Pin|DIN_7_Pin
                           |DIN_8_Pin|DIN_2_Pin|DIN_3_Pin;
   GPIO_InitStruct.Mode = GPIO_MODE_INPUT;
-  GPIO_InitStruct.Pull = GPIO_NOPULL;
+  GPIO_InitStruct.Pull = GPIO_PULLUP;
   HAL_GPIO_Init(GPIOE, &GPIO_InitStruct);
 
   /*Configure GPIO pins : DIN_9_Pin DIN_10_Pin DIN_11_Pin */
   GPIO_InitStruct.Pin = DIN_9_Pin|DIN_10_Pin|DIN_11_Pin;
   GPIO_InitStruct.Mode = GPIO_MODE_INPUT;
-  GPIO_InitStruct.Pull = GPIO_NOPULL;
+  GPIO_InitStruct.Pull = GPIO_PULLUP;
   HAL_GPIO_Init(GPIOC, &GPIO_InitStruct);
 
   /*Configure GPIO pin : ERESET_Pin */
@@ -396,7 +396,7 @@ static void MX_GPIO_Init(void)
   /*Configure GPIO pins : DIN_0_Pin DIN_1_Pin */
   GPIO_InitStruct.Pin = DIN_0_Pin|DIN_1_Pin;
   GPIO_InitStruct.Mode = GPIO_MODE_INPUT;
-  GPIO_InitStruct.Pull = GPIO_NOPULL;
+  GPIO_InitStruct.Pull = GPIO_PULLUP;
   HAL_GPIO_Init(GPIOB, &GPIO_InitStruct);
 
 }
