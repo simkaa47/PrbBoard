@@ -1,6 +1,0 @@
-../Core/Src/uart_task.c:31:6:uart_thread	40	static
-../Core/Src/uart_task.c:53:13:StartReciveUartAll	16	static
-../Core/Src/uart_task.c:61:13:StartReceive	16	static
-../Core/Src/uart_task.c:81:6:HAL_UARTEx_RxEventCallback	32	static
-../Core/Src/uart_task.c:105:12:RecognizePacket	24	static
-../Core/Src/uart_task.c:121:13:Transmit	24	static
