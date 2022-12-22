@@ -29,6 +29,7 @@
 #include <uart_task.h>
 #include <cmsis_os.h>
 #include <lwip.h>
+#include <keyboard.h>
 
 /* USER CODE END Includes */
 
@@ -89,6 +90,7 @@ void task_init()
 	fre=xPortGetFreeHeapSize();
 	osMailQDef(uart_queue, UART_QUEUE_SIZE, Uart_Queue_Struct);
 	uart_queue = osMailCreate(osMailQ(uart_queue), NULL);
+	sys_thread_new("keyboard_thread", keyscan_thread, (void*)NULL, 128, osPriorityNormal );
 }
 
 /* USER CODE END Application */

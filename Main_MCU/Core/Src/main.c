@@ -110,10 +110,7 @@ int main(void)
   /* USER CODE BEGIN 2 */
   lcd_init();
   ethernet_reset();
-  sendStr("HELLO, KONVELS",1,0);
-  sendStr("POWERED BY", 2,0);
-  sendStr("STM32F407VG",3,0);
-  sendStr("I AM ROBOT", 4,0);
+
   /* USER CODE END 2 */
 
   /* USER CODE BEGIN RTOS_MUTEX */
@@ -396,10 +393,10 @@ static void MX_GPIO_Init(void)
   GPIO_InitStruct.Alternate = GPIO_AF0_MCO;
   HAL_GPIO_Init(GPIOA, &GPIO_InitStruct);
 
-  /*Configure GPIO pins : KEYB_C0D0_Pin KEYB_C1D1_Pin KEYB_C2D2_Pin KEYB_C3D3_Pin
-                           KEYB_C4D4_Pin KEYB_C5D5_Pin */
-  GPIO_InitStruct.Pin = KEYB_C0D0_Pin|KEYB_C1D1_Pin|KEYB_C2D2_Pin|KEYB_C3D3_Pin
-                          |KEYB_C4D4_Pin|KEYB_C5D5_Pin;
+  /*Configure GPIO pins : KEYB_R0_Pin KEYB_R1_Pin KEYB_R2_Pin KEYB_R3_Pin
+                           KEYB_R4_Pin KEYB_R5_Pin */
+  GPIO_InitStruct.Pin = KEYB_R0_Pin|KEYB_R1_Pin|KEYB_R2_Pin|KEYB_R3_Pin
+                          |KEYB_R4_Pin|KEYB_R5_Pin;
   GPIO_InitStruct.Mode = GPIO_MODE_INPUT;
   GPIO_InitStruct.Pull = GPIO_PULLDOWN;
   HAL_GPIO_Init(GPIOD, &GPIO_InitStruct);
