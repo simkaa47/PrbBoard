@@ -323,7 +323,8 @@ static void MX_GPIO_Init(void)
                           |DOUT_8_Pin, GPIO_PIN_RESET);
 
   /*Configure GPIO pin Output Level */
-  HAL_GPIO_WritePin(GPIOD, DOUT_10_Pin|DOUT_11_Pin, GPIO_PIN_RESET);
+  HAL_GPIO_WritePin(GPIOD, DOUT_10_Pin|DOUT_11_Pin|KEYB_C0_Pin|KEYB_C1_Pin
+                          |KEYB_C2_Pin|KEYB_C3_Pin|KEYB_C4_Pin|KEYB_C5_Pin, GPIO_PIN_RESET);
 
   /*Configure GPIO pin Output Level */
   HAL_GPIO_WritePin(RS485_TX_GPIO_Port, RS485_TX_Pin, GPIO_PIN_RESET);
@@ -371,8 +372,10 @@ static void MX_GPIO_Init(void)
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
   HAL_GPIO_Init(GPIOE, &GPIO_InitStruct);
 
-  /*Configure GPIO pins : DOUT_10_Pin DOUT_11_Pin */
-  GPIO_InitStruct.Pin = DOUT_10_Pin|DOUT_11_Pin;
+  /*Configure GPIO pins : DOUT_10_Pin DOUT_11_Pin KEYB_C0_Pin KEYB_C1_Pin
+                           KEYB_C2_Pin KEYB_C3_Pin KEYB_C4_Pin KEYB_C5_Pin */
+  GPIO_InitStruct.Pin = DOUT_10_Pin|DOUT_11_Pin|KEYB_C0_Pin|KEYB_C1_Pin
+                          |KEYB_C2_Pin|KEYB_C3_Pin|KEYB_C4_Pin|KEYB_C5_Pin;
   GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
@@ -392,6 +395,14 @@ static void MX_GPIO_Init(void)
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
   GPIO_InitStruct.Alternate = GPIO_AF0_MCO;
   HAL_GPIO_Init(GPIOA, &GPIO_InitStruct);
+
+  /*Configure GPIO pins : KEYB_C0D0_Pin KEYB_C1D1_Pin KEYB_C2D2_Pin KEYB_C3D3_Pin
+                           KEYB_C4D4_Pin KEYB_C5D5_Pin */
+  GPIO_InitStruct.Pin = KEYB_C0D0_Pin|KEYB_C1D1_Pin|KEYB_C2D2_Pin|KEYB_C3D3_Pin
+                          |KEYB_C4D4_Pin|KEYB_C5D5_Pin;
+  GPIO_InitStruct.Mode = GPIO_MODE_INPUT;
+  GPIO_InitStruct.Pull = GPIO_PULLDOWN;
+  HAL_GPIO_Init(GPIOD, &GPIO_InitStruct);
 
   /*Configure GPIO pins : DIN_0_Pin DIN_1_Pin */
   GPIO_InitStruct.Pin = DIN_0_Pin|DIN_1_Pin;
