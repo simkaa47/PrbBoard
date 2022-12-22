@@ -166,7 +166,7 @@ static void PrintSymbol(const char *str)
 {
 	counter++;
 	sprintf(lcd[row_pointer], "%s  %d",str,counter);
-	row_pointer = row_pointer>=3 ? 0 : row_pointer++;
+	row_pointer = row_pointer>=3 ? 0 : row_pointer+1;
 	sendStr(lcd[0], 0, 0);
 	sendStr(lcd[1], 1, 0);
 	sendStr(lcd[2], 2, 0);
