@@ -65,7 +65,7 @@ void keyscan_thread(void *argument)
 
 static void Tact_pins(void)
 {
-	out_key_pin = (out_key_pin+1)/COLUMNS_COUNT;
+	out_key_pin = (out_key_pin+1)%COLUMNS_COUNT;
 	switch(out_key_pin)
 	{
 		case 0:
@@ -143,10 +143,10 @@ static void key_filter(uint8_t x, uint8_t y)
 {
 	if(key_input_mask[x][y])
 	{
-		key_sence_count[x][y]= key_sence_count[x][y]>=KEY_SENCE ? KEY_SENCE : key_sence_count[x][y]++;
+		key_sence_count[x][y]= key_sence_count[x][y]>=KEY_SENCE ? KEY_SENCE : key_sence_count[x][y]+1;
 	}
 	else{
-		key_sence_count[x][y]= key_sence_count[x][y]<=0 ? 0 : key_sence_count[x][y]--;
+		key_sence_count[x][y]= key_sence_count[x][y]<=0 ? 0 : key_sence_count[x][y]-1;
 	}
 	if(key_sence_count[x][y]==KEY_SENCE)key_input_filtered_mask[x][y] = 1;
 	if(key_sence_count[x][y]==0)key_input_filtered_mask[x][y] = 0;
