@@ -1,3 +1,0 @@
-../Core/Src/control_bit.c:10:10:set_bit	16	static
-../Core/Src/control_bit.c:15:10:reset_bit	16	static
-../Core/Src/control_bit.c:20:9:read_bit	16	static
