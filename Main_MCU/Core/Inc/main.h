@@ -123,6 +123,14 @@ void Error_Handler(void);
 #define KEYB_C5_GPIO_Port GPIOD
 #define RS485_TX_Pin GPIO_PIN_8
 #define RS485_TX_GPIO_Port GPIOC
+#define S3CS0_Pin GPIO_PIN_15
+#define S3CS0_GPIO_Port GPIOA
+#define S3SCK_Pin GPIO_PIN_10
+#define S3SCK_GPIO_Port GPIOC
+#define S3MISO_Pin GPIO_PIN_11
+#define S3MISO_GPIO_Port GPIOC
+#define S3MOSI_Pin GPIO_PIN_12
+#define S3MOSI_GPIO_Port GPIOC
 #define KEYB_R0_Pin GPIO_PIN_0
 #define KEYB_R0_GPIO_Port GPIOD
 #define KEYB_R1_Pin GPIO_PIN_1

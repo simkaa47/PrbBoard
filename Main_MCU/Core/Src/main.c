@@ -368,6 +368,9 @@ static void MX_GPIO_Init(void)
   /*Configure GPIO pin Output Level */
   HAL_GPIO_WritePin(RS485_TX_GPIO_Port, RS485_TX_Pin, GPIO_PIN_RESET);
 
+  /*Configure GPIO pin Output Level */
+  HAL_GPIO_WritePin(S3CS0_GPIO_Port, S3CS0_Pin, GPIO_PIN_SET);
+
   /*Configure GPIO pins : DIN_4_Pin DIN_5_Pin DIN_6_Pin DIN_7_Pin
                            DIN_8_Pin DIN_2_Pin DIN_3_Pin */
   GPIO_InitStruct.Pin = DIN_4_Pin|DIN_5_Pin|DIN_6_Pin|DIN_7_Pin
@@ -382,12 +385,12 @@ static void MX_GPIO_Init(void)
   GPIO_InitStruct.Pull = GPIO_PULLUP;
   HAL_GPIO_Init(GPIOC, &GPIO_InitStruct);
 
-  /*Configure GPIO pin : ERESET_Pin */
-  GPIO_InitStruct.Pin = ERESET_Pin;
+  /*Configure GPIO pins : ERESET_Pin S3CS0_Pin */
+  GPIO_InitStruct.Pin = ERESET_Pin|S3CS0_Pin;
   GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
-  HAL_GPIO_Init(ERESET_GPIO_Port, &GPIO_InitStruct);
+  HAL_GPIO_Init(GPIOA, &GPIO_InitStruct);
 
   /*Configure GPIO pins : LCD0_Pin LCD1_Pin LCD2_Pin DOUT_9_Pin
                            LED_Pin LCDLED_Pin LCD3_Pin LCDR_Pin
