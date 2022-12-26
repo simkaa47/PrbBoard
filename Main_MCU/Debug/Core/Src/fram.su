@@ -1,0 +1,2 @@
+../Core/Src/fram.c:12:5:framDataRead	24	static
+../Core/Src/fram.c:28:5:framDataWrite	32	static

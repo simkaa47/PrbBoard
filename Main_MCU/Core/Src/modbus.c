@@ -42,14 +42,14 @@ void ModbusInit()
 	reading_pointer = (uint16_t*)&meas_data;
 	holding_size = sizeof(settings)/2;
 	reading_size = sizeof(meas_data)/2;
-	if(settings.mb_addr==0)settings.mb_addr = 1;
+	if(settings.retain.mb_addr==0)settings.retain.mb_addr = 1;
 }
 
 
 //Ф-я парсинга входящего буфера, если это Modbus, то возвращает кол-во байт
 int ModbusParse(uint8_t *request, uint16_t req_length, uint8_t *answer, ModbusSource source)
 {
-	settings.data[37]++;
+	settings.non_retain.data[37]++;
 	if(answer==NULL)return 0; // Проверка, выделилась ли память под ответ
 	if(!CheckRequestLength(request,req_length,source))return 0; // Проверка корректности длины пакета
 	if(!CheckMbAddr(request, source))return 0; // Проверка корректности адреса
@@ -84,7 +84,7 @@ static uint8_t CheckMbAddr(uint8_t *request,ModbusSource source)
 	{
 		addr =  *(request);
 	}
-	return addr == settings.mb_addr;
+	return addr == settings.retain.mb_addr;
 }
 
 //Проверка корректности функционального кода
@@ -274,6 +274,7 @@ static int WriteSingleRegister(uint8_t* request, uint8_t* answer, ModbusSource s
     	memcpy(answer, request,8);
     	return 8;
     }
+    settingsSaveFRAM();
     return 0;
 }
 
@@ -301,6 +302,7 @@ static int WrieMultiplyRegisters(uint8_t* request, uint8_t* answer,ModbusSource 
 		InsertWordsToMemory((uint16_t*)(request+7), ((uint8_t*)holding_pointer)+start_reg*2,reg_count);
 		return 8;
     }
+
     return 0;
 }
 
@@ -312,6 +314,7 @@ static int WriteToHoldings(uint8_t* request, uint8_t* answer,ModbusSource source
 		if(osSemaphoreWait(writeMemorySemaphoreHandle, 1000)==osOK)
 		{
 			result =  (*write)(request,answer,source);
+			settingsSaveFRAM();
 			osSemaphoreRelease(writeMemorySemaphoreHandle);
 		}
 	}

@@ -467,10 +467,12 @@ static void MX_GPIO_Init(void)
 /* USER CODE END Header_StartDefaultTask */
 void StartDefaultTask(void const * argument)
 {
+	int result = 0;
   /* init code for LWIP */
   MX_LWIP_Init();
   /* USER CODE BEGIN 5 */
   task_init();
+  result = settingsLoadFRAM();
 
   /* Infinite loop */
   for(;;)

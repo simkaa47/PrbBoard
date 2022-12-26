@@ -10,6 +10,9 @@
 
 #include <stdint.h>
 
+#define FRAM_SETTINGS_ADDR		0x00
+#define FRAM_SETTINGS_HEADER	0xABD8
+
 typedef struct
 {
 	unsigned short in0:1;
@@ -48,8 +51,22 @@ typedef struct
 	Discrete_Inputs input_emulation_values;
 	Discrete_Outputs output_emulation_switches;
 	Discrete_Outputs output_emulation_values;
-    uint16_t data[50];
-    uint16_t mb_addr;
+	uint16_t mb_addr;
+}Retain;
+
+typedef struct
+{
+
+	uint16_t data[50];
+}Non_Retain;
+
+
+
+typedef struct
+{
+    Retain retain;
+    Non_Retain non_retain;
+
 }Settings_Struct;
 
 typedef struct
@@ -59,6 +76,7 @@ typedef struct
     uint16_t data[40];
 }Meas_Data;
 
-
+int settingsLoadFRAM (void);
+int settingsSaveFRAM (void);
 
 #endif /* INC_SETTINGS_H_ */
