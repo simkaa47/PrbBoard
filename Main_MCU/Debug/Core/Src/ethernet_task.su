@@ -1,0 +1,4 @@
+../Core/Src/ethernet_task.c:19:6:ethernet_reset	8	static
+../Core/Src/ethernet_task.c:26:6:ethernet_thread	312	static
+../Core/Src/ethernet_task.c:72:13:Send	32	static
+../Core/Src/ethernet_task.c:89:12:ethernet_answer	32	static
