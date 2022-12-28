@@ -14,7 +14,8 @@ static void Start_Transmit(uint8_t *p, uint8_t size);
 
 static void Start_Transmit(uint8_t *p, uint8_t size)
 {
-	HAL_UART_Transmit_DMA(&huart1, p, size);
+	//HAL_UART_Transmit_DMA(&huart1, p, size);
+	HAL_UART_Transmit(&huart1, p, size, 100);
 }
 
 void Send_Adc(float value)

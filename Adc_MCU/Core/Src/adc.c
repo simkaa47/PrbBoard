@@ -34,5 +34,5 @@ void HAL_ADC_ConvCpltCallback(ADC_HandleTypeDef* hadc1)
 	}
 	adc_value = ((float)sum)/ADC_BUFFER_SIZE;
 	voltage  = 3 * adc_value/4095;
-	Send_Adc(adc_value);
+	//Send_Adc(adc_value);
 }

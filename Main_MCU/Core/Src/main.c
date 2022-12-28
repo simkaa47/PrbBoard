@@ -452,6 +452,8 @@ static void MX_GPIO_Init(void)
   GPIO_InitStruct.Pull = GPIO_PULLUP;
   HAL_GPIO_Init(GPIOB, &GPIO_InitStruct);
 
+
+
 }
 
 /* USER CODE BEGIN 4 */
@@ -472,7 +474,7 @@ void StartDefaultTask(void const * argument)
   MX_LWIP_Init();
   /* USER CODE BEGIN 5 */
   task_init();
-  result = settingsLoadFRAM();
+  //result = settingsLoadFRAM();
 
   /* Infinite loop */
   for(;;)
