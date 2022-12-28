@@ -64,8 +64,8 @@ osSemaphoreId writeMemorySemaphoreHandle;
 /* Private function prototypes -----------------------------------------------*/
 void SystemClock_Config(void);
 static void MX_GPIO_Init(void);
-static void MX_USART1_UART_Init(void);
 static void MX_DMA_Init(void);
+static void MX_USART1_UART_Init(void);
 static void MX_USART6_UART_Init(void);
 static void MX_SPI3_Init(void);
 void StartDefaultTask(void const * argument);
@@ -107,8 +107,8 @@ int main(void)
 
   /* Initialize all configured peripherals */
   MX_GPIO_Init();
-  MX_USART1_UART_Init();
   MX_DMA_Init();
+  MX_USART1_UART_Init();
   MX_USART6_UART_Init();
   MX_SPI3_Init();
   /* USER CODE BEGIN 2 */
@@ -452,8 +452,6 @@ static void MX_GPIO_Init(void)
   GPIO_InitStruct.Pull = GPIO_PULLUP;
   HAL_GPIO_Init(GPIOB, &GPIO_InitStruct);
 
-
-
 }
 
 /* USER CODE BEGIN 4 */
@@ -469,7 +467,6 @@ static void MX_GPIO_Init(void)
 /* USER CODE END Header_StartDefaultTask */
 void StartDefaultTask(void const * argument)
 {
-	int result = 0;
   /* init code for LWIP */
   MX_LWIP_Init();
   /* USER CODE BEGIN 5 */
