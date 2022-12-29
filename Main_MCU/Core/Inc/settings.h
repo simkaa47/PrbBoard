@@ -73,6 +73,7 @@ typedef struct
 {
 	Discrete_Inputs d_inputs;
 	Discrete_Outputs d_outputs;
+	float analog_input;
     uint16_t data[40];
 }Meas_Data;
 

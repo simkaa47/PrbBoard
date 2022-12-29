@@ -8,6 +8,7 @@
 #include <uart_task.h>
 #include <modbus.h>
 #include <cmsis_os.h>
+#include <string.h>
 
 
 uint8_t uart_input_buffer[2][UART_INPUT_BUFFER_SZ];
@@ -20,6 +21,7 @@ extern UART_HandleTypeDef huart6;
 extern DMA_HandleTypeDef hdma_usart1_rx;
 extern DMA_HandleTypeDef hdma_usart6_rx;
 extern osMailQId uart_queue; // Id очереди для uart_task
+extern Meas_Data meas_data;
 
 
 static int RecognizePacket(Uart_Queue_Struct *request);
@@ -108,7 +110,10 @@ static int RecognizePacket(Uart_Queue_Struct *request)
 	if(request->input_pointer==NULL)return 0;
 	if(request->huart->Instance==USART1)
 	{
-		// Написать обработку пакета от АЦП
+		if(request->inpit_size==6 && *(request->input_pointer)==0x0A && *(request->input_pointer+5)==0x0D)
+		{
+			memcpy(&(meas_data.analog_input),(request->input_pointer)+1,sizeof(float));
+		}
 		return 0;
 	}
 	else if (request->huart->Instance==USART6) {
