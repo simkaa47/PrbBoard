@@ -81,11 +81,11 @@ void sendStr( char *str, int row , int position )
 	switch (row)
 	{
 
-		case 1:
+		case 0:
 			start_address = 0x0; // 1 строка
 			break;
 
-		case 2:
+		case 1:
 			start_address = 0x40; // 2 строка
 			break;
 
@@ -93,7 +93,7 @@ void sendStr( char *str, int row , int position )
 			start_address = 0x14; // 3 строка
 			break;
 
-		case 4:
+		case 3:
 			start_address = 0x54; // 4 строка
 			break;
 
