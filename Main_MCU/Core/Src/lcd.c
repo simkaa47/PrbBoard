@@ -89,7 +89,7 @@ void sendStr( char *str, int row , int position )
 			start_address = 0x40; // 2 строка
 			break;
 
-		case 3:
+		case 2:
 			start_address = 0x14; // 3 строка
 			break;
 

@@ -1,0 +1,2 @@
+../Core/Src/analog.c:18:6:Analog_Start	8	static
+../Core/Src/analog.c:25:6:HAL_ADC_ConvCpltCallback	16	static
