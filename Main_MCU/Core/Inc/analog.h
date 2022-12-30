@@ -11,6 +11,7 @@
 #include <main.h>
 
 #define PT100_INPUT_BUFFER_SIZE 40
+#define V_REF_VALUE *VREFINT_CAL_ADDR
 
 typedef struct
 {
@@ -24,5 +25,6 @@ typedef struct
 }Pt100_Struct;
 
 void Analog_Start(void);
+void Analog_Read(void);
 
 #endif /* INC_ANALOG_H_ */
