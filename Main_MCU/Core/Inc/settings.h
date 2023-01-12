@@ -15,6 +15,31 @@
 
 typedef struct
 {
+	uint32_t baudrate;
+	uint16_t parity;
+}RS485_Sett;
+
+typedef struct
+{
+	uint16_t addr0;
+	uint16_t addr1;
+	uint16_t addr2;
+	uint16_t addr3;
+	uint16_t mask0;
+	uint16_t mask1;
+	uint16_t mask2;
+	uint16_t mask3;
+	uint16_t gateway0;
+	uint16_t gateway1;
+	uint16_t gateway2;
+	uint16_t gateway3;
+}Ethernet_Settings;
+
+
+
+
+typedef struct
+{
 	unsigned short in0:1;
 	unsigned short in1:1;
 	unsigned short in2:1;
@@ -52,11 +77,14 @@ typedef struct
 	Discrete_Outputs output_emulation_switches;
 	Discrete_Outputs output_emulation_values;
 	uint16_t mb_addr;
+	RS485_Sett rs_sett;
+	Ethernet_Settings eth_sett;
 }Retain;
+
+
 
 typedef struct
 {
-
 	uint16_t data[50];
 }Non_Retain;
 

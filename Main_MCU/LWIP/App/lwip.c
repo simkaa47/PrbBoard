@@ -28,14 +28,16 @@
 #include "ethernetif.h"
 
 /* USER CODE BEGIN 0 */
+#include <settings.h>
 
+extern Settings_Struct settings;
 /* USER CODE END 0 */
 /* Private function prototypes -----------------------------------------------*/
 /* ETH Variables initialization ----------------------------------------------*/
 void Error_Handler(void);
 
 /* USER CODE BEGIN 1 */
-
+static void LWIP_ReInit();
 /* USER CODE END 1 */
 /* Semaphore to signal Ethernet Link state update */
 osSemaphoreId Netif_LinkSemaphore = NULL;
@@ -52,7 +54,40 @@ uint8_t NETMASK_ADDRESS[4];
 uint8_t GATEWAY_ADDRESS[4];
 
 /* USER CODE BEGIN 2 */
+static void LWIP_ReInit()
+{
+	if((!(uint8_t)settings.retain.eth_sett.addr0 &&
+			!(uint8_t)settings.retain.eth_sett.addr1 &&
+			!(uint8_t)settings.retain.eth_sett.addr2 &&
+			!(uint8_t)settings.retain.eth_sett.addr3))
+	{
+		  IP_ADDRESS[0] = (uint8_t)settings.retain.eth_sett.addr0;
+		  IP_ADDRESS[1] = (uint8_t)settings.retain.eth_sett.addr1;
+		  IP_ADDRESS[2] = (uint8_t)settings.retain.eth_sett.addr2;
+		  IP_ADDRESS[3] = (uint8_t)settings.retain.eth_sett.addr3;
+	}
 
+	if((!(uint8_t)settings.retain.eth_sett.mask0 &&
+			!(uint8_t)settings.retain.eth_sett.mask1 &&
+			!(uint8_t)settings.retain.eth_sett.mask2 &&
+			!(uint8_t)settings.retain.eth_sett.mask3))
+	{
+		  IP_ADDRESS[0] = (uint8_t)settings.retain.eth_sett.mask0;
+		  IP_ADDRESS[1] = (uint8_t)settings.retain.eth_sett.mask1;
+		  IP_ADDRESS[2] = (uint8_t)settings.retain.eth_sett.mask2;
+		  IP_ADDRESS[3] = (uint8_t)settings.retain.eth_sett.mask3;
+	}
+	if((!(uint8_t)settings.retain.eth_sett.gateway0 &&
+			!(uint8_t)settings.retain.eth_sett.gateway1 &&
+			!(uint8_t)settings.retain.eth_sett.gateway2 &&
+			!(uint8_t)settings.retain.eth_sett.gateway3))
+	{
+		  IP_ADDRESS[0] = (uint8_t)settings.retain.eth_sett.gateway0;
+		  IP_ADDRESS[1] = (uint8_t)settings.retain.eth_sett.gateway1;
+		  IP_ADDRESS[2] = (uint8_t)settings.retain.eth_sett.gateway2;
+		  IP_ADDRESS[3] = (uint8_t)settings.retain.eth_sett.gateway3;
+	}
+}
 /* USER CODE END 2 */
 
 /**
@@ -75,6 +110,7 @@ void MX_LWIP_Init(void)
   GATEWAY_ADDRESS[3] = 1;
 
 /* USER CODE BEGIN IP_ADDRESSES */
+  LWIP_ReInit();
 /* USER CODE END IP_ADDRESSES */
 
   /* Initilialize the LwIP stack with RTOS */
