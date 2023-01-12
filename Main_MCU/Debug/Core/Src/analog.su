@@ -1,4 +1,4 @@
-../Core/Src/analog.c:25:6:Analog_Start	8	static
-../Core/Src/analog.c:33:6:Analog_Read	8	static
-../Core/Src/analog.c:38:13:Calc_Pt100	16	static
-../Core/Src/analog.c:51:6:HAL_ADC_ConvCpltCallback	56	static
+analog.c:25:6:Analog_Start	8	static
+analog.c:33:6:Analog_Read	8	static
+analog.c:38:13:Calc_Pt100	16	static
+analog.c:51:6:HAL_ADC_ConvCpltCallback	48	static

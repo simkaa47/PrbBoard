@@ -9,5 +9,6 @@
 #define INC_MAIN_PROCESS_H_
 
 void main_process();
+void main_process_init();
 
 #endif /* INC_MAIN_PROCESS_H_ */

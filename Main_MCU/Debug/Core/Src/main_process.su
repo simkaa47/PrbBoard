@@ -1,1 +1,2 @@
-../Core/Src/main_process.c:11:6:main_process	8	static
+main_process.c:15:6:main_process	8	static
+main_process.c:25:6:main_process_init	4	static

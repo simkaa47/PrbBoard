@@ -1,2 +1,2 @@
-../Core/Src/freertos.c:70:6:vApplicationGetIdleTaskMemory	24	static
-../Core/Src/freertos.c:81:6:task_init	40	static
+freertos.c:70:6:vApplicationGetIdleTaskMemory	24	static
+freertos.c:81:6:task_init	40	static

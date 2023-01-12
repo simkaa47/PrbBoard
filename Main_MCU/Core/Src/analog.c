@@ -50,14 +50,12 @@ static void Calc_Pt100()
 
 void HAL_ADC_ConvCpltCallback(ADC_HandleTypeDef* hadc)
 {
-	float pt100_0, pt100_1, pt100_2, pt100_3, pt100_4, vRef;
+	float pt100_0, pt100_1, pt100_3, vRef;
 	vRef = pt100_input_buffer.V_ref;
 	vRef = 3.3f*(float)V_REF_VALUE/vRef;
 	pt100_0 = pt100_input_buffer.Pt100_0 * 3.3f/vRef;
 	pt100_1 = pt100_input_buffer.Pt100_1 * 3.3f/vRef;
-	pt100_2 = pt100_input_buffer.Pt100_2 * 3.3f/vRef;
 	pt100_3 = pt100_input_buffer.Pt100_3 * 3.3f/vRef;
-	pt100_4 = pt100_input_buffer.Pt100_4 * 3.3f/vRef;
 	float vpt100 = pt100_3 - pt100_1;
 	float ref = pt100_1-pt100_0;
 	float v_result = vpt100*100/ref;
