@@ -88,18 +88,18 @@ static void Filter_Inputs()
 {
 	uint8_t inputs[INPUT_NUMBER];
 
-	inputs[0] = HAL_GPIO_ReadPin(DIN_0_GPIO_Port, DIN_0_Pin);
-	inputs[1] = HAL_GPIO_ReadPin(DIN_1_GPIO_Port, DIN_1_Pin);
-	inputs[2] = HAL_GPIO_ReadPin(DIN_2_GPIO_Port, DIN_2_Pin);
-	inputs[3] = HAL_GPIO_ReadPin(DIN_3_GPIO_Port, DIN_3_Pin);
-	inputs[4] = HAL_GPIO_ReadPin(DIN_4_GPIO_Port, DIN_4_Pin);
-	inputs[5] = HAL_GPIO_ReadPin(DIN_5_GPIO_Port, DIN_5_Pin);
-	inputs[6] = HAL_GPIO_ReadPin(DIN_6_GPIO_Port, DIN_6_Pin);
-	inputs[7] = HAL_GPIO_ReadPin(DIN_7_GPIO_Port, DIN_7_Pin);
-	inputs[8] = HAL_GPIO_ReadPin(DIN_8_GPIO_Port, DIN_8_Pin);
-	inputs[9] = HAL_GPIO_ReadPin(DIN_9_GPIO_Port, DIN_9_Pin);
-	inputs[10] = HAL_GPIO_ReadPin(DIN_10_GPIO_Port, DIN_10_Pin);
-	inputs[11] = HAL_GPIO_ReadPin(DIN_11_GPIO_Port, DIN_11_Pin);
+	inputs[0] = !HAL_GPIO_ReadPin(DIN_0_GPIO_Port, DIN_0_Pin);
+	inputs[1] = !HAL_GPIO_ReadPin(DIN_1_GPIO_Port, DIN_1_Pin);
+	inputs[2] = !HAL_GPIO_ReadPin(DIN_2_GPIO_Port, DIN_2_Pin);
+	inputs[3] = !HAL_GPIO_ReadPin(DIN_3_GPIO_Port, DIN_3_Pin);
+	inputs[4] = !HAL_GPIO_ReadPin(DIN_4_GPIO_Port, DIN_4_Pin);
+	inputs[5] = !HAL_GPIO_ReadPin(DIN_5_GPIO_Port, DIN_5_Pin);
+	inputs[6] = !HAL_GPIO_ReadPin(DIN_6_GPIO_Port, DIN_6_Pin);
+	inputs[7] = !HAL_GPIO_ReadPin(DIN_7_GPIO_Port, DIN_7_Pin);
+	inputs[8] = !HAL_GPIO_ReadPin(DIN_8_GPIO_Port, DIN_8_Pin);
+	inputs[9] = !HAL_GPIO_ReadPin(DIN_9_GPIO_Port, DIN_9_Pin);
+	inputs[10] = !HAL_GPIO_ReadPin(DIN_10_GPIO_Port, DIN_10_Pin);
+	inputs[11] = !HAL_GPIO_ReadPin(DIN_11_GPIO_Port, DIN_11_Pin);
 	for (int i = 0; i < INPUT_NUMBER; ++i) {
 		if(inputs[i])
 		{
@@ -109,12 +109,9 @@ static void Filter_Inputs()
 		{
 			filter_state[i] = filter_state[i]>0 ? filter_state[i]-1 : 0;
 		}
-		if(filter_state[i]>=ANTIDREBEZG_CNT)
-		{
+		if (filter_state[i]>=ANTIDREBEZG_CNT) {
 			filters_inputs[i]=1;
-		}
-		if(filter_state==0)
-		{
+		} else if(filter_state[i]==0) {
 			filters_inputs[i]=0;
 		}
 	}

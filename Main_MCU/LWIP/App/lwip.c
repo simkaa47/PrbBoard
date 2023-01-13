@@ -56,10 +56,10 @@ uint8_t GATEWAY_ADDRESS[4];
 /* USER CODE BEGIN 2 */
 static void LWIP_ReInit()
 {
-	if((!(uint8_t)settings.retain.eth_sett.addr0 &&
-			!(uint8_t)settings.retain.eth_sett.addr1 &&
-			!(uint8_t)settings.retain.eth_sett.addr2 &&
-			!(uint8_t)settings.retain.eth_sett.addr3))
+	if(((uint8_t)settings.retain.eth_sett.addr0 ||
+			(uint8_t)settings.retain.eth_sett.addr1 ||
+			(uint8_t)settings.retain.eth_sett.addr2 ||
+			(uint8_t)settings.retain.eth_sett.addr3))
 	{
 		  IP_ADDRESS[0] = (uint8_t)settings.retain.eth_sett.addr0;
 		  IP_ADDRESS[1] = (uint8_t)settings.retain.eth_sett.addr1;
@@ -67,25 +67,25 @@ static void LWIP_ReInit()
 		  IP_ADDRESS[3] = (uint8_t)settings.retain.eth_sett.addr3;
 	}
 
-	if((!(uint8_t)settings.retain.eth_sett.mask0 &&
-			!(uint8_t)settings.retain.eth_sett.mask1 &&
-			!(uint8_t)settings.retain.eth_sett.mask2 &&
-			!(uint8_t)settings.retain.eth_sett.mask3))
+	if(((uint8_t)settings.retain.eth_sett.mask0 ||
+			(uint8_t)settings.retain.eth_sett.mask1 ||
+			(uint8_t)settings.retain.eth_sett.mask2 ||
+			(uint8_t)settings.retain.eth_sett.mask3))
 	{
-		  IP_ADDRESS[0] = (uint8_t)settings.retain.eth_sett.mask0;
-		  IP_ADDRESS[1] = (uint8_t)settings.retain.eth_sett.mask1;
-		  IP_ADDRESS[2] = (uint8_t)settings.retain.eth_sett.mask2;
-		  IP_ADDRESS[3] = (uint8_t)settings.retain.eth_sett.mask3;
+		  NETMASK_ADDRESS[0] = (uint8_t)settings.retain.eth_sett.mask0;
+		  NETMASK_ADDRESS[1] = (uint8_t)settings.retain.eth_sett.mask1;
+		  NETMASK_ADDRESS[2] = (uint8_t)settings.retain.eth_sett.mask2;
+		  NETMASK_ADDRESS[3] = (uint8_t)settings.retain.eth_sett.mask3;
 	}
-	if((!(uint8_t)settings.retain.eth_sett.gateway0 &&
-			!(uint8_t)settings.retain.eth_sett.gateway1 &&
-			!(uint8_t)settings.retain.eth_sett.gateway2 &&
-			!(uint8_t)settings.retain.eth_sett.gateway3))
+	if(((uint8_t)settings.retain.eth_sett.gateway0 ||
+			(uint8_t)settings.retain.eth_sett.gateway1 ||
+			(uint8_t)settings.retain.eth_sett.gateway2 ||
+			(uint8_t)settings.retain.eth_sett.gateway3))
 	{
-		  IP_ADDRESS[0] = (uint8_t)settings.retain.eth_sett.gateway0;
-		  IP_ADDRESS[1] = (uint8_t)settings.retain.eth_sett.gateway1;
-		  IP_ADDRESS[2] = (uint8_t)settings.retain.eth_sett.gateway2;
-		  IP_ADDRESS[3] = (uint8_t)settings.retain.eth_sett.gateway3;
+		  GATEWAY_ADDRESS[0] = (uint8_t)settings.retain.eth_sett.gateway0;
+		  GATEWAY_ADDRESS[1] = (uint8_t)settings.retain.eth_sett.gateway1;
+		  GATEWAY_ADDRESS[2] = (uint8_t)settings.retain.eth_sett.gateway2;
+		  GATEWAY_ADDRESS[3] = (uint8_t)settings.retain.eth_sett.gateway3;
 	}
 }
 /* USER CODE END 2 */

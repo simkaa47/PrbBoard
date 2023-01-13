@@ -4,6 +4,7 @@
  *  Created on: Dec 13, 2022
  *      Author: Serafim
  */
+#include <cmsis_os.h>
 #include <string.h>
 #include <dio.h>
 #include <analog.h>
