@@ -79,12 +79,16 @@ typedef struct
 	uint16_t mb_addr;
 	RS485_Sett rs_sett;
 	Ethernet_Settings eth_sett;
+	uint32_t prob_toHomeTime;
+	uint32_t prob_toWorkTime;
+
 }Retain;
 
 
 
 typedef struct
 {
+	uint16_t start_otbor;
 	uint16_t data[50];
 }Non_Retain;
 
@@ -103,6 +107,12 @@ typedef struct
 	Discrete_Outputs d_outputs;
 	float analog_input;
 	float pt100;
+	uint16_t probotbor_busy;
+	uint16_t vozvrat_probotbor_busy;
+	uint16_t probotbor_error;
+	uint16_t probotbor_status;
+	uint16_t vozvrat_status;
+	uint32_t timeout;
     uint16_t data[40];
 }Meas_Data;
 

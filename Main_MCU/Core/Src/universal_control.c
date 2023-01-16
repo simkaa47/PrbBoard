@@ -11,6 +11,8 @@
 Universal_Control_Init_State universal_control_init(Universal_Control_Struct *var)
 {
 	var->addTime = 100;
+	if(var->toHomeTime == 0)var->toHomeTime = 10000;
+	if(var->toWorkTime == 0)var->toWorkTime = 10000;
 	if(Timer_Init(&(var->timer))==TIMER_FAIL)return UNIVERSAL_CONTROL_INIT_FAIL;
 	if(Timer_Init(&(var->homeErr))==TIMER_FAIL)return UNIVERSAL_CONTROL_INIT_FAIL;
 	if(Timer_Init(&(var->workErr))==TIMER_FAIL)return UNIVERSAL_CONTROL_INIT_FAIL;
