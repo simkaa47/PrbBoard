@@ -79,3 +79,5 @@ static uint8_t checksumCalc (uint8_t * data, uint16_t size)
 
 
 
+
+

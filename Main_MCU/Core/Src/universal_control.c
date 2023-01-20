@@ -98,6 +98,7 @@ void universal_control_execute(Universal_Control_Struct *var)
 		var->busy = 0;
 		var->status = 6;
 		var->operation = 2;
+		var->startVozvrat = 0;
 	}
 
 	// xz, zachem

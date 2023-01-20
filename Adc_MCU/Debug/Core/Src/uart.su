@@ -1,2 +1,0 @@
-uart.c:15:13:Start_Transmit	16	static
-uart.c:21:6:Send_Adc	16	static

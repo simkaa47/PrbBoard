@@ -24,6 +24,7 @@ typedef struct
 
 
 void uart_thread(void *argument);
+int RsReInit (void);
 
 
 #endif /* INC_UART_TASK_H_ */

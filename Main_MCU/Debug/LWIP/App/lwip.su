@@ -1,2 +1,0 @@
-lwip.c:57:13:LWIP_ReInit	4	static
-lwip.c:96:6:MX_LWIP_Init	32	static

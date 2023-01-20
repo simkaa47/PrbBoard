@@ -79,18 +79,38 @@ typedef struct
 	uint16_t mb_addr;
 	RS485_Sett rs_sett;
 	Ethernet_Settings eth_sett;
-	uint32_t prob_toHomeTime;
-	uint32_t prob_toWorkTime;
+	uint16_t prob_toHomeTime;
+	uint16_t prob_toWorkTime;
+	uint16_t automat_timer;
+
 
 }Retain;
+
+typedef struct
+{
+	unsigned int nakopitel_kanistra_err:1;
+	unsigned int nakopitel_door_err:1;
+	unsigned int uz_err:1;
+	unsigned int sb_abort_err:1;
+	unsigned int sq_left_err:1;
+	unsigned int sq_right_err:1;
+	unsigned int timeout_moving_right_err:1;
+	unsigned int timeout_moving_left_err:1;
+	unsigned int need_return_err:1;
+
+}Errors_Struct;
+
 
 
 
 typedef struct
 {
 	uint16_t start_otbor;
+	uint16_t start_vozvrat;
 	uint16_t data[50];
 }Non_Retain;
+
+
 
 
 
@@ -107,12 +127,12 @@ typedef struct
 	Discrete_Outputs d_outputs;
 	float analog_input;
 	float pt100;
+	uint16_t probotbor_ready;
 	uint16_t probotbor_busy;
 	uint16_t vozvrat_probotbor_busy;
-	uint16_t probotbor_error;
-	uint16_t probotbor_status;
-	uint16_t vozvrat_status;
-	uint32_t timeout;
+	uint16_t automat_mode;
+	uint16_t toNextOtborTime;
+	Errors_Struct errors;
     uint16_t data[40];
 }Meas_Data;
 

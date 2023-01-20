@@ -22,6 +22,7 @@ extern DMA_HandleTypeDef hdma_usart1_rx;
 extern DMA_HandleTypeDef hdma_usart6_rx;
 extern osMailQId uart_queue; // Id очереди для uart_task
 extern Meas_Data meas_data;
+extern Settings_Struct settings;
 
 
 static int RecognizePacket(Uart_Queue_Struct *request);
@@ -30,10 +31,12 @@ static void StartReciveUartAll();
 static void Transmit(UART_HandleTypeDef *huart, uint8_t *p, uint16_t size);
 
 
+
 void uart_thread(void *argument)
 {
 	osEvent event;
 	Uart_Queue_Struct *queue_arg;
+	RsReInit();
 	StartReciveUartAll();
 	while(1)
 	{
@@ -110,9 +113,11 @@ static int RecognizePacket(Uart_Queue_Struct *request)
 	if(request->input_pointer==NULL)return 0;
 	if(request->huart->Instance==USART1)
 	{
+		float analog = 0;
 		if(request->inpit_size==6 && *(request->input_pointer)==0x0A && *(request->input_pointer+5)==0x0D)
 		{
-			memcpy(&(meas_data.analog_input),(request->input_pointer)+1,sizeof(float));
+			memcpy(&analog,(request->input_pointer)+1,sizeof(float));
+			meas_data.analog_input = analog * 10;
 		}
 		return 0;
 	}
@@ -132,6 +137,37 @@ static void Transmit(UART_HandleTypeDef *huart, uint8_t *p, uint16_t size)
 		HAL_GPIO_WritePin(RS485_TX_GPIO_Port, RS485_TX_Pin, RESET);
 
 	}
+}
+
+int RsReInit (void)
+{
+	int result = 0;
+	result = HAL_UART_DeInit(&huart1);
+	if (result == HAL_OK)
+	{
+		uint32_t parity = 0;
+		switch (settings.retain.rs_sett.parity) {
+			case 0:
+				parity = UART_PARITY_NONE;
+				break;
+			case 1:
+				parity = UART_PARITY_EVEN;
+				break;
+			default:
+				parity = UART_PARITY_ODD;
+				break;
+		}
+		huart6.Instance = USART6;
+		huart6.Init.BaudRate = settings.retain.rs_sett.baudrate>0 ? settings.retain.rs_sett.baudrate : 9600;
+		huart6.Init.WordLength = UART_WORDLENGTH_8B;
+		huart6.Init.StopBits = UART_STOPBITS_1;
+		huart6.Init.Parity = parity;
+		huart6.Init.Mode = UART_MODE_TX_RX;
+		huart6.Init.HwFlowCtl = UART_HWCONTROL_NONE;
+		huart6.Init.OverSampling = UART_OVERSAMPLING_16;
+		result = HAL_UART_Init(&huart6);
+	}
+  return result;
 }
 
 

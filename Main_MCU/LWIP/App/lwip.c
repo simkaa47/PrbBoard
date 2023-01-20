@@ -87,6 +87,22 @@ static void LWIP_ReInit()
 		  GATEWAY_ADDRESS[2] = (uint8_t)settings.retain.eth_sett.gateway2;
 		  GATEWAY_ADDRESS[3] = (uint8_t)settings.retain.eth_sett.gateway3;
 	}
+	settings.retain.eth_sett.addr0 = IP_ADDRESS[0];
+	settings.retain.eth_sett.addr1 = IP_ADDRESS[1];
+	settings.retain.eth_sett.addr2 = IP_ADDRESS[2];
+	settings.retain.eth_sett.addr3 = IP_ADDRESS[3];
+
+	settings.retain.eth_sett.mask0 = NETMASK_ADDRESS[0];
+	settings.retain.eth_sett.mask1 = NETMASK_ADDRESS[1];
+	settings.retain.eth_sett.mask2 = NETMASK_ADDRESS[2];
+	settings.retain.eth_sett.mask3 = NETMASK_ADDRESS[3];
+
+	settings.retain.eth_sett.gateway0 =  GATEWAY_ADDRESS[0];
+	settings.retain.eth_sett.gateway1 =  GATEWAY_ADDRESS[1];
+	settings.retain.eth_sett.gateway2 =  GATEWAY_ADDRESS[2];
+	settings.retain.eth_sett.gateway3 =  GATEWAY_ADDRESS[3];
+
+
 }
 /* USER CODE END 2 */
 
