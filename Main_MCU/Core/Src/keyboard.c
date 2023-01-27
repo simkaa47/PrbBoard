@@ -9,6 +9,8 @@
 #include <string.h>
 #include <stdio.h>
 #include <lcd.h>
+#include <keyboard_action.h>
+
 
 uint8_t out_key_pin;
 uint8_t key_input_mask[COLUMNS_COUNT][ROWS_COUNT]={0};
@@ -19,17 +21,18 @@ uint8_t positive_fronts[COLUMNS_COUNT][ROWS_COUNT]={0};
 
 const char *keys[6][6] = {{NULL,NULL,NULL,NULL,NULL,NULL},
 							{NULL,NULL,NULL,NULL,NULL,NULL},
-							{"Esc","left","F4","F3","F2","F1"},
-							{NULL,"up","del","7","4","1"},
-							{"down",NULL,"0","8","5","2"},
-							{"enter","right",".","9","6","3"}};
-char lcd[4][80];
+							{"Esc","Left","F4","F3","F2","F1"},
+							{NULL,"Up","Delete","NumPad7","NumPad4","NumPad1"},
+							{"Down",NULL,"NumPad0","NumPad8","NumPad5","NumPad2"},
+							{"Enter","Right","Dec","NumPad9","NumPad6","NumPad3"}};
+char lcd[4][20];
 
 uint8_t row_pointer = 0;
 int counter = 0;
 
 
 static void Tact_pins(void);
+static void SendToLcd();
 static void Key_Read(void);
 static void GetPositiveFront(void);
 static void key_filter(uint8_t x, uint8_t y);
@@ -39,7 +42,15 @@ static void PrintSymbol(const char *str);
 
 void keyscan_thread(void *argument)
 {
+	int result = 0;
+	int time;
+	int last_time;
 
+	result = OnKeyPress("Enter", strlen("Enter"), lcd);
+	if(result)
+	{
+		SendToLcd();
+	}
 	while(1)
 	{
 		Tact_pins();
@@ -52,13 +63,21 @@ void keyscan_thread(void *argument)
 				{
 					if(keys[i][j]!=NULL)
 					{
-						PrintSymbol(keys[i][j]);
+						result = OnKeyPress(keys[i][j], strlen(keys[i][j]), lcd);
+						if(result)
+						{
+							SendToLcd();
+						}
 					}
 				}
 			}
 		}
-
-
+		time = HAL_GetTick();
+		if((time-last_time)>500)
+		{
+			LcdUpdate();
+			last_time = time;
+		}
 		osDelay(2);
 	}
 }
@@ -167,6 +186,11 @@ static void PrintSymbol(const char *str)
 	counter++;
 	sprintf(lcd[row_pointer], "%s  %d",str,counter);
 	row_pointer = row_pointer>=3 ? 0 : row_pointer+1;
+	SendToLcd();
+}
+
+static void SendToLcd()
+{
 	sendStr(lcd[0], 0, 0);
 	sendStr(lcd[1], 1, 0);
 	sendStr(lcd[2], 2, 0);

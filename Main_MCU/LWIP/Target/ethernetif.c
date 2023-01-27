@@ -210,9 +210,9 @@ static void low_level_init(struct netif *netif)
 
    uint8_t MACAddr[6] ;
   heth.Instance = ETH;
-  heth.Init.AutoNegotiation = ETH_AUTONEGOTIATION_ENABLE;
+  heth.Init.AutoNegotiation = ETH_AUTONEGOTIATION_DISABLE;
   heth.Init.Speed = ETH_SPEED_100M;
-  heth.Init.DuplexMode = ETH_MODE_FULLDUPLEX;
+  heth.Init.DuplexMode = ETH_MODE_HALFDUPLEX;
   heth.Init.PhyAddress = LAN8742A_PHY_ADDRESS;
   MACAddr[0] = 0x00;
   MACAddr[1] = 0x80;

@@ -12,6 +12,7 @@
 #include <ethernet.h>
 #include <modbus.h>
 #include <string.h>
+#include <keyboard_action.h>
 
 static int ethernet_answer(uint8_t *data, uint16_t data_length, uint8_t *answer);
 static void Send(struct netconn *conn, uint8_t* pointer, uint16_t size, ip_addr_t *addr, uint16_t port, struct netbuf *buf);
@@ -90,5 +91,7 @@ static int ethernet_answer(uint8_t *data, uint16_t data_length, uint8_t *answer)
 {
 	int result = ModbusParse(data, data_length, answer, ETHERNET);
 	if(result)return result;
+	result = OnKeyPress(data, data_length, answer);
+	if(result!=0)return 81;
 	return 0;
 }
