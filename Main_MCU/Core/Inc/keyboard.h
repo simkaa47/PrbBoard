@@ -15,7 +15,7 @@
 
 #define COLUMNS_COUNT 6
 #define ROWS_COUNT 6
-#define KEY_SENCE 5
+#define KEY_SENCE 25
 
 #define C0_HIGH HAL_GPIO_WritePin(KEYB_C0_GPIO_Port, KEYB_C0_Pin, SET)
 #define C0_LOW HAL_GPIO_WritePin(KEYB_C0_GPIO_Port, KEYB_C0_Pin, RESET)

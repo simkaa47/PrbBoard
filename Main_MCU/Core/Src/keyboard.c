@@ -46,8 +46,8 @@ void keyscan_thread(void *argument)
 	int time;
 	int last_time;
 
-	result = OnKeyPress("Enter", strlen("Enter"), lcd);
-	if(result)
+	result = OnKeyPress("F1", strlen("F1"), lcd);
+	if(result!=0)
 	{
 		SendToLcd();
 	}
@@ -64,7 +64,7 @@ void keyscan_thread(void *argument)
 					if(keys[i][j]!=NULL)
 					{
 						result = OnKeyPress(keys[i][j], strlen(keys[i][j]), lcd);
-						if(result)
+						if(result!=0)
 						{
 							SendToLcd();
 						}

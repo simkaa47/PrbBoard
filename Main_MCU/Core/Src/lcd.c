@@ -104,10 +104,16 @@ void sendStr( char *str, int row , int position )
 	sendByte((start_address |= SET_DDRAM_ADDRESS), 0); // ставим курсор на начало нужной строки  в DDRAM
 
 	HAL_Delay(4);
-	while(*str != '\0'){
-
-		sendByte(*str, 1);
-		str++;
+//	while(*str != '\0'){
+//
+//		sendByte(*str, 1);
+//		str++;
+//	}
+	uint8_t byte  = 0;
+	for (int i = 0; i < 20; ++i) {
+		byte = *(str+i);
+		if(byte==0)byte = 32;
+		sendByte(byte, 1);
 	}
 }
 

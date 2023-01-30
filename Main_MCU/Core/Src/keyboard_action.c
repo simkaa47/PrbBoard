@@ -268,11 +268,11 @@ int OnKeyPress(uint8_t *req,uint8_t req_length, uint8_t *answer)
 	}
 	else if(!strncmp(p, "Right", strlen("Right")))
 	{
-		return get_answer(strlen("Right"),req,answer);
+		return 0;
 	}
 	else if(!strncmp(p, "Left", strlen("Left")))
 	{
-		return get_answer(strlen("Left"),req,answer);
+		return 0;
 	}
 	else if(!strncmp(p, "Down", strlen("Down")))
 	{
@@ -297,59 +297,59 @@ int OnKeyPress(uint8_t *req,uint8_t req_length, uint8_t *answer)
 	}
 	else if(!strncmp(p, "NumPad0", strlen("NumPad0")))
 	{
-		return get_answer(strlen("NumPad0"),req,answer);
+		return 0;
 	}
 	else if(!strncmp(p, "NumPad1", strlen("NumPad1")))
 	{
-		return get_answer(strlen("NumPad1"),req,answer);
+		return 0;
 	}
 	else if(!strncmp(p, "NumPad2", strlen("NumPad2")))
 	{
-		return get_answer(strlen("NumPad2"),req,answer);
+		return 0;
 	}
 	else if(!strncmp(p, "NumPad3", strlen("NumPad3")))
 	{
-		return get_answer(strlen("NumPad3"),req,answer);
+		return 0;
 	}
 	else if(!strncmp(p, "NumPad4", strlen("NumPad4")))
 	{
-		return get_answer(strlen("NumPad4"),req,answer);
+		return 0;
 	}
 	else if(!strncmp(p, "NumPad5", strlen("NumPad5")))
 	{
-		return get_answer(strlen("NumPad5"),req,answer);
+		return 0;
 	}
 	else if(!strncmp(p, "NumPad6", strlen("NumPad6")))
 	{
-		return get_answer(strlen("NumPad6"),req,answer);
+		return 0;
 	}
 	else if(!strncmp(p, "NumPad7", strlen("NumPad7")))
 	{
-		return get_answer(strlen("NumPad7"),req,answer);
+		return 0;
 	}
 	else if(!strncmp(p, "NumPad8", strlen("NumPad8")))
 	{
-		return get_answer(strlen("NumPad8"),req,answer);
+		return 0;
 	}
 	else if(!strncmp(p, "NumPad9", strlen("NumPad9")))
 	{
-		return get_answer(strlen("NumPad9"),req,answer);
+		return 0;
 	}
 	else if(!strncmp(p, "Dec", strlen("Dec")))
 	{
-		return get_answer(strlen("Dec"),req,answer);
+		return 0;
 	}
 	else return 0;
-	memcpy(answer,lcdAnswer,81);
+	memcpy(answer,lcdAnswer,80);
 	if(currentCursorPosition==-1)
 	{
-		answer[80] = 255;
+		//answer[80] = 255;
 		return -1;
 
 	}
 	else
 	{
-		answer[80] = currentCursorPosition+40;
+		//answer[80] = currentCursorPosition+40;
 	}
 	return currentCursorPosition+40;
 }

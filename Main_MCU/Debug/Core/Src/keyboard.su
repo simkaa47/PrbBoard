@@ -1,8 +1,8 @@
-keyboard.c:43:6:keyscan_thread	48	static
-keyboard.c:85:13:Tact_pins	8	static
-keyboard.c:142:13:Key_Read	16	static
-keyboard.c:152:13:key_filter_all	16	static
-keyboard.c:161:13:key_filter	16	static
-keyboard.c:174:13:GetPositiveFront	16	static
-keyboard.c:184:13:PrintSymbol	16	static
-keyboard.c:192:13:SendToLcd	8	static
+../Core/Src/keyboard.c:43:6:keyscan_thread	48	static
+../Core/Src/keyboard.c:85:13:Tact_pins	8	static
+../Core/Src/keyboard.c:142:13:Key_Read	16	static
+../Core/Src/keyboard.c:152:13:key_filter_all	16	static
+../Core/Src/keyboard.c:161:13:key_filter	16	static
+../Core/Src/keyboard.c:174:13:GetPositiveFront	16	static
+../Core/Src/keyboard.c:184:13:PrintSymbol	16	static
+../Core/Src/keyboard.c:192:13:SendToLcd	8	static
