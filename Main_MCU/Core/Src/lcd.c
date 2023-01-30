@@ -34,11 +34,43 @@ void lcd_init()
 	HAL_Delay(2);
 	sendByte(ENTRY_MODE_SET, 0); //ставим режим смещение курсора экран не смещается
 	HAL_Delay(1);
-	sendByte(DISPLAY_ON, 0);// включаем дисплей и убираем курсор
+	sendByte(DISPLAY_ON_CURSOR_OFF, 0);// включаем дисплей и убираем курсор
 	HAL_Delay(1);
+}
 
-
-
+void SetCursor(int position)
+{
+	if(position==-1 || position>79)
+	{
+		sendByte(DISPLAY_ON_CURSOR_OFF, 0);// включаем дисплей и убираем курсор
+		HAL_Delay(1);
+	}
+	else
+	{
+		sendByte(DISPLAY_ON_CURSOR_ON, 0);// включаем дисплей и ставим курсор
+		HAL_Delay(1);
+		uint8_t row = position/20;
+		uint8_t col = position%20;
+		uint8_t addr = 0;
+		switch (row) {
+			case 0:
+				addr = 0x0;
+				break;
+			case 1:
+				addr = 0x40;
+				break;
+			case 2:
+				addr = 0x14;
+				break;
+			case 3:
+				addr = 0x54;
+				break;
+			default:
+				return;
+		}
+		sendByte(64+addr+col, 0); // установка курсора
+		HAL_Delay(1);
+	}
 }
 
 static void sendByte(uint8_t byte, int isData)

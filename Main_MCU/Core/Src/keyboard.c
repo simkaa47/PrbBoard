@@ -67,6 +67,7 @@ void keyscan_thread(void *argument)
 						if(result!=0)
 						{
 							SendToLcd();
+							SetCursor(47);
 						}
 					}
 				}

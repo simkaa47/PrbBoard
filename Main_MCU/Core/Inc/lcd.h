@@ -11,7 +11,9 @@
 #define CLEAR_DISPLAY 0x1
 #define RETURN_HOME 0x2
 #define ENTRY_MODE_SET 0x6 // mode cursor shift rihgt, display non shift
-#define DISPLAY_ON 0xC // non cursor
+#define DISPLAY_ON_CURSOR_OFF 0xC // non cursor
+#define DISPLAY_OFF 0x8
+#define DISPLAY_ON_CURSOR_ON 0xF // with cursor
 #define DISPLAY_OFF 0x8
 #define CURSOR_SHIFT_LEFT 0x10
 #define CURSOR_SHIFT_RIGHT 0x14
@@ -27,5 +29,6 @@
 
 void lcd_init();//  Инициализация дисплея
 void sendStr( char *str, int row , int position );
+void SetCursor(int position);
 
 #endif /* INC_LCD_H_ */
