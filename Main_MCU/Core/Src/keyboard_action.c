@@ -9,6 +9,7 @@
 #include <settings.h>
 #include <math.h>
 
+
 extern Settings_Struct settings;
 extern Meas_Data meas_data;
 
@@ -24,6 +25,7 @@ char *indicationName = "Indication";
 uint8_t groupParamNameLength;
 uint8_t err_count;
 int8_t currentCursorPosition = -1;
+float currentEnumKey = 0;
 char editedValue[20];
 
 Error_Indication_Struct errors_info[10];
@@ -42,12 +44,16 @@ static uint8_t OnF1PressKey();
 static uint8_t OnF2PressKey();
 static uint8_t OnF3PressKey();
 static uint8_t OnF4PressKey();
+static uint8_t OnLeftPressKey();
+static uint8_t OnRightPressKey();
 static void ShowParameter(Row *parameter);
 static int Min(int x, int y);
 static uint8_t GetAllErrors();
 static uint8_t ShowErrors();
 static Dictionary *FindDictionaryFromValue(float value, Dictionary *dictionary, uint8_t dict_len);
+static int FindIndexFromValue(float value, Dictionary *dictionary, uint8_t dict_len);
 static void Print(Row *parameter, uint8_t index);
+static void AcceptEdit(Row *parameter);
 
 Dictionary baudrates[]={
 		{
@@ -216,6 +222,15 @@ Row commParameters[] = {
 				.enums = parities,
 				.enums_len = sizeof(parities)/sizeof(Dictionary),
 				.type = ROW_USHORT
+		},
+		{
+				.name = "6.Modbus address",
+				.isEdited = 1,
+				.data = (uint8_t*)(&settings.retain.mb_addr),
+				.isEnum = 0,
+				.name_len = strlen("6.Modbus address"),
+				.param_pos = 2,
+				.type = ROW_USHORT
 		}
 
 
@@ -268,11 +283,11 @@ int OnKeyPress(uint8_t *req,uint8_t req_length, uint8_t *answer)
 	}
 	else if(!strncmp(p, "Right", strlen("Right")))
 	{
-		return 0;
+		if(!OnRightPressKey())return 0;
 	}
 	else if(!strncmp(p, "Left", strlen("Left")))
 	{
-		return 0;
+		if(!OnLeftPressKey())return 0;
 	}
 	else if(!strncmp(p, "Down", strlen("Down")))
 	{
@@ -343,13 +358,13 @@ int OnKeyPress(uint8_t *req,uint8_t req_length, uint8_t *answer)
 	memcpy(answer,lcdAnswer,80);
 	if(currentCursorPosition==-1)
 	{
-		//answer[80] = 255;
+		answer[80] = 255;
 		return -1;
 
 	}
 	else
 	{
-		//answer[80] = currentCursorPosition+40;
+		answer[80] = currentCursorPosition+40;
 	}
 	return currentCursorPosition+40;
 }
@@ -384,14 +399,54 @@ static uint8_t OnEnterPressAction()
 			if(par->isEdited)
 			{
 				Clear();
-				Print(par,2);
-//				editedValue = lcdAnswer[2]+par->param_pos;
-//				int hhh = strlen(editedValue);
-				if(!par->isEnum)currentCursorPosition = par->param_pos;
-				editMode = 1;
-				ShowParameter(par);
-				return 1;
+				if(!par->isEnum)
+				{
+					Print(par,2);
+					for (int i = 0; i < 20; ++i) {
+						editedValue[i] = lcdAnswer[2][i];
+					}
+					editMode = 1;
+					currentCursorPosition = par->param_pos;
+					ShowParameter(par);
+					return 1;
+				}
+				else
+				{
+					if(par->enums==NULL)return 0;
+					memset(editedValue,0,20);
+					switch (par->type) {
+						case ROW_USHORT:
+							currentEnumKey = *((uint16_t*)par->data);
+							break;
+						case ROW_UINT:
+							currentEnumKey = *((uint32_t*)par->data);
+							break;
+						default:
+							break;
+					}
+					Dictionary *dict = FindDictionaryFromValue(currentEnumKey, par->enums, par->enums_len);
+					if(dict==NULL)
+					{
+						currentEnumKey = par->enums->value;
+						memcpy(editedValue+par->param_pos,par->enums->name, strlen(par->enums->name));
+					}
+					else
+					{
+						currentEnumKey = dict->value;
+						memcpy(editedValue+par->param_pos,dict->name, strlen(dict->name));
+					}
+					currentCursorPosition = -1;
+					editMode = 1;
+					ShowParameter(par);
+					return 1;
+				}
 			}
+		}
+		else
+		{
+			AcceptEdit(par);
+			ShowParameter(par);
+			return 1;
 		}
 	}
 	return 0;
@@ -456,6 +511,52 @@ static uint8_t OnDownPressKey()
 	paramIndex++;
 	ShowParameter(currentParameters+paramIndex);
 	return 1;
+}
+
+static uint8_t OnLeftPressKey()
+{
+	int index = 0;
+	if(!editMode)return 0;
+	if(currentParameters==NULL)return 0;
+	Row *par = currentParameters+paramIndex;
+	if(par->isEnum)
+	{
+		if(par->enums==NULL)return 0;
+		// поиск индекса вхождения
+		index = FindIndexFromValue(currentEnumKey, par->enums, par->enums_len);
+		if(index==-1)return 0;
+		index = index==0 ? par->enums_len-1 : index-1;
+		currentEnumKey = (par->enums+index)->value;
+		memset(editedValue,0,20);
+		strncpy(editedValue+par->param_pos,(par->enums+index)->name, strlen((par->enums+index)->name));
+		ShowParameter(par);
+		return 1;
+
+	}
+	return 0;
+}
+
+static uint8_t OnRightPressKey()
+{
+	int index = 0;
+	if(!editMode)return 0;
+	if(currentParameters==NULL)return 0;
+	Row *par = currentParameters+paramIndex;
+	if(par->isEnum)
+	{
+		if(par->enums==NULL)return 0;
+		// поиск индекса вхождения
+		index = FindIndexFromValue(currentEnumKey, par->enums, par->enums_len);
+		if(index==-1)return 0;
+		index = index==par->enums_len-1 ? 0 : index+1;
+		currentEnumKey = (par->enums+index)->value;
+		memset(editedValue,0,20);
+		strncpy(editedValue+par->param_pos,(par->enums+index)->name, strlen((par->enums+index)->name));
+		ShowParameter(par);
+		return 1;
+
+	}
+	return 0;
 }
 
 static uint8_t OnUpPressKey()
@@ -543,26 +644,34 @@ static void ShowParameter(Row *parameter)
 	memcpy(lcdAnswer[1],parameter->name,parameter->name_len); // Имя  параметра
 	if(parameter->isEnum)
 	{
-		float value = 0;
-		switch (parameter->type) {
-			case ROW_USHORT:
-				value = *((uint16_t*)parameter->data);
-				break;
-			case ROW_UINT:
-				value = *((uint32_t*)parameter->data);
-				break;
-			default:
-				break;
-		}
-		Dictionary *pair = FindDictionaryFromValue(value, parameter->enums, parameter->enums_len);
-		if(pair == NULL)
+		if(editMode)
 		{
-			strncpy(lcdAnswer[2]+parameter->param_pos,"Undefined", strlen("Undefined"));
+			strncpy(lcdAnswer[2]+parameter->param_pos,editedValue+parameter->param_pos, strlen(editedValue+parameter->param_pos));
 		}
 		else
 		{
-			strncpy(lcdAnswer[2]+parameter->param_pos,pair->name, strlen(pair->name));
+			float value = 0;
+			switch (parameter->type) {
+				case ROW_USHORT:
+					value = *((uint16_t*)parameter->data);
+					break;
+				case ROW_UINT:
+					value = *((uint32_t*)parameter->data);
+					break;
+				default:
+					break;
+			}
+			Dictionary *pair = FindDictionaryFromValue(value, parameter->enums, parameter->enums_len);
+			if(pair == NULL)
+			{
+				strncpy(lcdAnswer[2]+parameter->param_pos,"Undefined", strlen("Undefined"));
+			}
+			else
+			{
+				strncpy(lcdAnswer[2]+parameter->param_pos,pair->name, strlen(pair->name));
+			}
 		}
+
 	}
 	else
 	{
@@ -680,6 +789,18 @@ static Dictionary *FindDictionaryFromValue(float value, Dictionary *dictionary, 
 	return NULL;
 }
 
+/*Возращает индекс "ключ-значение", если записи нет, -1*/
+static int FindIndexFromValue(float value, Dictionary *dictionary, uint8_t dict_len)
+{
+	Dictionary *temp = NULL;
+	for (int i = 0; i < dict_len; ++i) {
+		temp = dictionary+i;
+		if(temp->value == value)return i;
+
+	}
+	return -1;
+}
+
 
 
 void LcdUpdate()
@@ -690,6 +811,11 @@ void LcdUpdate()
 static void Print(Row *parameter, uint8_t index)
 {
 	uint16_t temp = 0;
+	if(editMode)
+	{
+		memcpy(lcdAnswer[index],editedValue,20);
+		return;
+	}
 	switch (parameter->type) {
 		case ROW_ETH_ADDR:
 			sprintf(lcdAnswer[index]+parameter->param_pos,"%d.%d.%d.%d",*((uint16_t*)parameter->data),*(((uint16_t*)parameter->data)+1),*(((uint16_t*)parameter->data)+2),*(((uint16_t*)parameter->data)+3));
@@ -710,6 +836,31 @@ static void Print(Row *parameter, uint8_t index)
 		default:
 			break;
 	}
+}
+
+static void AcceptEdit(Row *par)
+{
+	if(editMode==0)return;
+	if(par->isEnum)
+	{
+		switch (par->type) {
+			case ROW_USHORT:
+				*((uint16_t*)par->data) = (uint16_t)currentEnumKey;
+				break;
+			case ROW_UINT:
+				*((uint32_t*)par->data) = (uint32_t)currentEnumKey;
+				break;
+			case ROW_FLOAT:
+				*((float*)par->data) = currentEnumKey;
+				break;
+			default:
+				break;
+		}
+	}
+	settingsSaveFRAM();
+	editMode = 0;
+	currentCursorPosition = -1;
+
 }
 
 
