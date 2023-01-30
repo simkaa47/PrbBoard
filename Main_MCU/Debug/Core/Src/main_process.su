@@ -1,2 +1,2 @@
-main_process.c:16:6:main_process	8	static
-main_process.c:26:6:main_process_init	4	static
+../Core/Src/main_process.c:16:6:main_process	8	static
+../Core/Src/main_process.c:26:6:main_process_init	4	static

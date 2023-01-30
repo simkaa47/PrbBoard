@@ -11,7 +11,7 @@
 #include <main.h>
 
 int OnKeyPress(uint8_t *req,uint8_t req_length, uint8_t *answer);
-void LcdUpdate();
+uint8_t LcdUpdate(uint8_t *answer);
 
 typedef enum
 {

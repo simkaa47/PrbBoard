@@ -358,13 +358,13 @@ int OnKeyPress(uint8_t *req,uint8_t req_length, uint8_t *answer)
 	memcpy(answer,lcdAnswer,80);
 	if(currentCursorPosition==-1)
 	{
-		answer[80] = 255;
+		//answer[80] = 255;
 		return -1;
 
 	}
 	else
 	{
-		answer[80] = currentCursorPosition+40;
+		//answer[80] = currentCursorPosition+40;
 	}
 	return currentCursorPosition+40;
 }
@@ -803,9 +803,28 @@ static int FindIndexFromValue(float value, Dictionary *dictionary, uint8_t dict_
 
 
 
-void LcdUpdate()
+uint8_t LcdUpdate(uint8_t *answer)
 {
-
+	uint8_t result = 0;
+	if(currentParameters==NULL)
+	{
+		result =  ShowMainDisplay();
+	}
+	else if(currentParameters==Errors)
+	{
+		result =  ShowErrors();
+	}
+	else if(currentParameters == indication_rows)
+	{
+		ShowParameter(currentParameters+paramIndex);
+		result =  1;
+	}
+	if(result)
+	{
+		memcpy(answer,lcdAnswer,80);
+		return 1;
+	}
+	return 0;
 }
 
 static void Print(Row *parameter, uint8_t index)

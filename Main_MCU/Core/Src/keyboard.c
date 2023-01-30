@@ -76,7 +76,12 @@ void keyscan_thread(void *argument)
 		time = HAL_GetTick();
 		if((time-last_time)>500)
 		{
-			LcdUpdate();
+			result = LcdUpdate(lcd);
+			if(result!=0)
+			{
+				SendToLcd();
+				SetCursor(-1);
+			}
 			last_time = time;
 		}
 		osDelay(2);
