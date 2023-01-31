@@ -26,8 +26,8 @@ void lcd_init()
 	sendByte(0x32, 0); // шлем в одном байте  00110010
 	HAL_Delay(1);
 
-	sendByte(DATA_BUS_4BIT_PAGE0, 0); // включаем режим 4 бит
-	HAL_Delay(1);
+	sendByte(DATA_BUS_4BIT_PAGE1, 0); // включаем режим 4 бит
+	HAL_Delay(2);
 	sendByte(DISPLAY_OFF, 0); // выключаем дисплей
 	HAL_Delay(1);
 	sendByte(CLEAR_DISPLAY, 0); // очищаем дисплей

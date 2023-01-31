@@ -63,11 +63,11 @@ void keyscan_thread(void *argument)
 				{
 					if(keys[i][j]!=NULL)
 					{
-						result = OnKeyPress(keys[i][j], strlen(keys[i][j]), lcd);
+						result = OnKeyPress(keys[i][j], strlen(keys[i][j]), (uint8_t*)lcd);
 						if(result!=0)
 						{
 							SendToLcd();
-							SetCursor(47);
+							SetCursor(result);
 						}
 					}
 				}
@@ -76,7 +76,7 @@ void keyscan_thread(void *argument)
 		time = HAL_GetTick();
 		if((time-last_time)>500)
 		{
-			result = LcdUpdate(lcd);
+			result = LcdUpdate((uint8_t*)lcd);
 			if(result!=0)
 			{
 				SendToLcd();
@@ -172,6 +172,7 @@ static void key_filter(uint8_t x, uint8_t y)
 	}
 	else{
 		key_sence_count[x][y]= key_sence_count[x][y]<=0 ? 0 : key_sence_count[x][y]-1;
+		//key_sence_count[x][y]= 0;
 	}
 	if(key_sence_count[x][y]==KEY_SENCE)key_input_filtered_mask[x][y] = 1;
 	if(key_sence_count[x][y]==0)key_input_filtered_mask[x][y] = 0;
@@ -187,13 +188,7 @@ static void GetPositiveFront()
 	}
 }
 
-static void PrintSymbol(const char *str)
-{
-	counter++;
-	sprintf(lcd[row_pointer], "%s  %d",str,counter);
-	row_pointer = row_pointer>=3 ? 0 : row_pointer+1;
-	SendToLcd();
-}
+
 
 static void SendToLcd()
 {

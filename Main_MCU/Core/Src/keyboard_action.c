@@ -18,10 +18,48 @@ char *groupParamName;
 uint8_t paramIndex = 0;
 uint8_t editMode = 0;
 uint8_t currentParamLength;
-char *commParametersName = "Comm Parameters";
-char *processParametersName = "ProcParameters";
-char *errorsName = "Errors";
-char *indicationName = "Indication";
+char commParametersName[] = {0xCF, 0xE0, 0xF0, 0xE0, 0xEC, 0xE5, 0xF2, 0xF0, 0xFB, 0x20, 0xF1, 0xE2, 0xFF, 0xE7, 0xE8,0x00};
+char processParametersName[] = {0xCF, 0xE0, 0xF0, 0xE0, 0xEC, 0xE5, 0xF2, 0xF0, 0xFB, 0x20, 0xEE, 0xF2, 0xE1, 0xEE, 0xF0, 0xE0,0x00};
+char errorsName[] = {0xCE, 0xF8, 0xE8, 0xE1, 0xEA, 0xE8,0x00};
+char indicationName[] = {0xCC, 0xEE, 0xED, 0xE8, 0xF2, 0xEE, 0xF0, 0xE8, 0xED, 0xE3,0x00};
+
+// Ошибки
+const char errKanistra[] = {0xCD, 0xE5, 0xF2, 0x20, 0xEA, 0xE0, 0xED, 0xE8, 0xF1, 0xF2, 0xF0, 0xFB, 0x00};
+const char errDoorKanistra[] = {0xC4, 0xE2, 0xE5, 0xF0, 0xFC, 0x20, 0xEA, 0xE0, 0xED, 0xE8, 0xF1, 0xF2, 0xF0, 0xFB,0x00};
+const char errUZ[] = {0xCE, 0xF8, 0xE8, 0xE1, 0xEA, 0xE0, 0x20, 0xCF, 0xD7, 0x00};
+const char abortErr[] = {0xC0, 0xE2, 0xE0, 0xF0, 0xE8, 0xE9, 0xED, 0xFB, 0xE9, 0x20, 0xF1, 0xF2, 0xEE, 0xEF, 0x00};
+const char sqLeft[] = {0xC0, 0xE2, 0x2E, 0x20, 0xEA, 0xEE, 0xED, 0xF6, 0x2E, 0x20, 0xF1, 0xEB, 0xE5, 0xE2, 0xE0, 0x00};
+const char sqRight[] = {0xC0, 0xE2, 0x2E, 0x20, 0xEA, 0xEE, 0xED, 0xF6, 0x2E, 0x20, 0xF1, 0xEF, 0xF0, 0xE0, 0xE2, 0xE0, 0x00};
+const char timeoutRight[] = {0xD2, 0xE0, 0xE9, 0xEC, 0x2D, 0xE0, 0xF3, 0xF2, 0x20, 0xE2, 0xEF, 0xF0, 0xE0, 0xE2, 0xEE, 0x00};
+const char timeoutLeft[] = {0xD2, 0xE0, 0xE9, 0xEC, 0x2D, 0xE0, 0xF3, 0xF2, 0x20, 0xE2, 0xEB, 0xE5, 0xE2, 0xEE, 0x00};
+const char needReturn[] = {0xCD, 0xE5, 0xEE, 0xE1, 0xF5, 0xEE, 0xE4, 0xE8, 0xEC, 0x20, 0xE2, 0xEE, 0xE7, 0xE2, 0xF0, 0xE0, 0xF2, 0x00};
+const char fullNakop[] = {0xCD, 0xE0, 0xEA, 0xEE, 0xEF, 0xE8, 0xF2, 0xE5, 0xEB, 0xFC, 0x20, 0xEF, 0xEE, 0xEB, 0xED, 0xFB, 0xE9,  0x00};
+
+// Паратметры проботборника
+const char parTimeoutLeft1[] = {0x31, 0x2E, 0xD2, 0xE0, 0xE9, 0xEC, 0xE0, 0xF3, 0xF2, 0x20, 0xE2, 0xEB, 0xE5, 0xE2, 0xEE, 0x2C, 0x20, 0x63, 0x00};
+const char parTimeoutRight2[] = {0x32, 0x2E, 0xD2, 0xE0, 0xE9, 0xEC, 0xE0, 0xF3, 0xF2, 0x20, 0xE2, 0xEF, 0xF0, 0xE0, 0xE2, 0xEE, 0x2C, 0x20, 0x63, 0x00};
+const char parAutoSel3[] = {0x33, 0x2E, 0xCF, 0xE5, 0xF0, 0xE8, 0xEE, 0xE4, 0x20, 0xEE, 0xF2, 0xE1, 0xEE, 0xF0, 0xE0, 0x2C, 0x20, 0x63, 0x00};
+//4.Емк. канистры, проб
+const char nakopSV4[] = {0x34, 0x2E, 0x56, 0x20, 0xEA, 0xE0, 0xED, 0xE8, 0xF1, 0xF2, 0xF0, 0xFB, 0x2C, 0x20, 0xEF, 0xF0, 0xEE, 0xE1,  0x00};
+//6.Проб в канистре
+const char parNakopCV[] = {0x36, 0x2E, 0xCF, 0xF0, 0xEE, 0xE1, 0x20, 0xE2, 0x20, 0xEA, 0xE0, 0xED, 0xE8, 0xF1, 0xF2, 0xF0, 0xE5,  0x00};
+
+
+
+// Параметры связи
+// 1.IP-адрес
+const char parEth1[] = {0x31, 0x2E, 0x49, 0x50, 0x2D, 0xE0, 0xE4, 0xF0, 0xE5, 0xF1,  0x00};
+// 2.Маска подсети
+const char parMask2[] = {0x32, 0x2E, 0xCC, 0xE0, 0xF1, 0xEA, 0xE0, 0x20, 0xEF, 0xEE, 0xE4, 0xF1, 0xE5, 0xF2, 0xE8,  0x00};
+// 3.Основной шлюз
+const char parGateway[] = {0x33, 0x2E, 0xCE, 0xF1, 0xED, 0xEE, 0xE2, 0xED, 0xEE, 0xE9, 0x20, 0xF8, 0xEB, 0xFE, 0xE7,  0x00};
+// 4.RS485-Скорость
+const char parBaudrate[] = {0x34, 0x2E, 0x52, 0x53, 0x34, 0x38, 0x35, 0x2D, 0xD1, 0xEA, 0xEE, 0xF0, 0xEE, 0xF1, 0xF2, 0xFC,  0x00};
+// 5.RS485-Паритет
+const char parParity[] = {0x35, 0x2E, 0x52, 0x53, 0x34, 0x38, 0x35, 0x2D, 0xCF, 0xE0, 0xF0, 0xE8, 0xF2, 0xE5, 0xF2,  0x00};
+// 6.Modbus адрес
+const char parModbAddr[] = {0x36, 0x2E, 0x4D, 0x6F, 0x64, 0x62, 0x75, 0x73, 0x20, 0xE0, 0xE4, 0xF0, 0xE5, 0xF1,  0x00};
+
 uint8_t groupParamNameLength;
 uint8_t err_count;
 int8_t currentCursorPosition = -1;
@@ -58,6 +96,10 @@ static int ShiftCursor(uint8_t direction, Row *par, uint8_t stepSize);
 static uint8_t OnNumberPressKey(uint8_t key);
 static uint8_t OnDeletePressKey();
 static uint8_t OnDecPressKey();
+static void ParseEthernetAddress(Row *par);
+static uint8_t IsNumber(char *symbol);
+static void DecIncSymbol(char *symbol, uint8_t dir);
+
 
 Dictionary baudrates[]={
 		{
@@ -111,65 +153,78 @@ Dictionary parities[] = {
 
 Row Errors[] = {
 		{
-				.name = "No kanistra"
+				.name = errKanistra
 		},
 		{
-				.name = "Err kanistra door"
+				.name = errDoorKanistra
 		},
 		{
-				.name = "Err freq conv"
+				.name = errUZ
 		},
 		{
-				.name = "Err sb abort"
+				.name = abortErr
 		},
 		{
-				.name = "Err sq left"
+				.name = sqLeft
 		},
 		{
-				.name = "Err sq right"
+				.name = sqRight
 		},
 		{
-				.name = "Err timeout right"
+				.name = timeoutRight
 		},
 		{
-				.name = "Err timeout left"
+				.name = timeoutLeft
 		},
 		{
-				.name = "Err need return"
+				.name = needReturn
 		},
+		{
+				.name = fullNakop
+		}
 };
 
 
 Row probotbor_parameters[] = {
 		{
-				.name = "1.Timeout left, s",
+				.name = parTimeoutLeft1,
 				.isEdited = 1,
 				.data = (uint8_t*)(&settings.retain.prob_toHomeTime),
 				.isEnum = 0,
-				.name_len = strlen("1.Timeout left, s"),
+				.name_len = sizeof(parTimeoutLeft1),
 				.param_len = 3,
-				.param_pos = 17,
+				.param_pos = 3,
 				.type = ROW_USHORT
 
 		},
 		{
-				.name = "2.Timeout right, s",
+				.name = parTimeoutRight2,
 				.isEdited = 1,
 				.data = (uint8_t*)(&settings.retain.prob_toWorkTime),
 				.isEnum = 0,
-				.name_len = strlen("2.Timeout right, s"),
+				.name_len = sizeof(parTimeoutRight2),
 				.param_len = 3,
-				.param_pos = 17,
+				.param_pos = 3,
 				.type = ROW_USHORT
 		},
 		{
-				.name = "3.Timer auto, s",
+				.name = parAutoSel3,
 				.isEdited = 1,
 				.data = (uint8_t*)(&settings.retain.automat_timer),
 				.isEnum = 0,
-				.name_len = strlen("3.Timer auto, s"),
+				.name_len = sizeof(parAutoSel3),
 				.param_len = 3,
-				.param_pos = 17,
+				.param_pos = 3,
+				.type = ROW_UINT
+		},
+		{
+				.name = nakopSV4,
+				.isEdited = 1,
+				.data = (uint8_t*)(&settings.retain.nakop_SV),
+				.isEnum = 0,
+				.name_len = sizeof(nakopSV4),
+				.param_len = 3,
+				.param_pos = 3,
 				.type = ROW_USHORT
 		}
 
@@ -178,66 +233,64 @@ Row probotbor_parameters[] = {
 
 Row commParameters[] = {
 		{
-				.name = "1.Ethernet address",
+				.name = parEth1,
 				.isEdited = 1,
 				.data = (uint8_t*)(&settings.retain.eth_sett.addr0),
 				.isEnum = 0,
-				.name_len = strlen("1.Ethernet address"),
+				.name_len = sizeof(parEth1),
 				.param_pos = 2,
 				.type = ROW_ETH_ADDR
 		},
 		{
-				.name = "2.Network Mask",
+				.name = parMask2,
 				.isEdited = 1,
 				.data = (uint8_t*)(&settings.retain.eth_sett.mask0),
 				.isEnum = 0,
-				.name_len = strlen("2.Network Mask"),
+				.name_len = sizeof(parMask2),
 				.param_len = 15,
 				.param_pos = 2,
 				.type = ROW_ETH_ADDR
 		},
 		{
-				.name = "3.Gateway",
+				.name = parGateway,
 				.isEdited = 1,
 				.data = (uint8_t*)(&settings.retain.eth_sett.gateway0),
 				.isEnum = 0,
-				.name_len = strlen("3.Gateway"),
+				.name_len = sizeof(parGateway),
 				.param_pos = 2,
 				.type = ROW_ETH_ADDR
 		},
 		{
-				.name = "4.RS485-Baudrate",
+				.name = parBaudrate,
 				.isEdited = 1,
 				.data = (uint8_t*)(&settings.retain.rs_sett.baudrate),
 				.isEnum = 1,
-				.name_len = strlen("4.RS485-Baudrate"),
+				.name_len = sizeof(parBaudrate),
 				.param_pos = 2,
 				.enums = baudrates,
 				.enums_len = sizeof(baudrates)/sizeof(Dictionary),
 				.type = ROW_UINT
 		},
 		{
-				.name = "5.RS485-Parity",
+				.name = parParity,
 				.isEdited = 1,
 				.data = (uint8_t*)(&settings.retain.rs_sett.parity),
 				.isEnum = 1,
-				.name_len = strlen("5.RS485-Parity"),
+				.name_len = sizeof(parParity),
 				.param_pos = 2,
 				.enums = parities,
 				.enums_len = sizeof(parities)/sizeof(Dictionary),
 				.type = ROW_USHORT
 		},
 		{
-				.name = "6.Modbus address",
+				.name = parModbAddr,
 				.isEdited = 1,
 				.data = (uint8_t*)(&settings.retain.mb_addr),
 				.isEnum = 0,
-				.name_len = strlen("6.Modbus address"),
+				.name_len = sizeof(parModbAddr),
 				.param_pos = 2,
 				.type = ROW_USHORT
 		}
-
-
 
 };
 
@@ -262,9 +315,18 @@ Row indication_rows[] = {
 				.param_pos = 8,
 				.type = ROW_BINARY_12
 		},
+		{
+				.name = parNakopCV,
+				.isEdited = 0,
+				.data = (uint8_t*)(&meas_data.probInKanistra),
+				.isEnum = 0,
+				.name_len = sizeof(parNakopCV),
+				.param_len = 3,
+				.param_pos = 3,
+				.type = ROW_USHORT
+		},
 };
 
-static int get_answer(uint8_t len, uint8_t *req, uint8_t *answer);
 
 int OnKeyPress(uint8_t *req,uint8_t req_length, uint8_t *answer)
 {
@@ -373,12 +435,6 @@ int OnKeyPress(uint8_t *req,uint8_t req_length, uint8_t *answer)
 	return currentCursorPosition+40;
 }
 
-static int get_answer(uint8_t len, uint8_t *req, uint8_t *answer)
-{
-	memcpy(answer,req,len);
-	return len;
-}
-
 static uint8_t OnEnterPressAction()
 {
 	Row *par = NULL;
@@ -470,33 +526,61 @@ static void Clear()
 static uint8_t ShowMainDisplay()
 {
 	Clear();
+
 	if(meas_data.automat_mode)
 	{
-		memcpy(lcdAnswer[0],"Auto mode ON",strlen("Auto mode ON"));
-		if(meas_data.probotbor_ready)sprintf(lcdAnswer[2],"Next sel. in %d s",meas_data.toNextOtborTime);
+		//Aвто ВКЛ
+		char  autoOn[] = {0x41, 0xE2, 0xF2, 0xEE, 0x20, 0xC2, 0xCA, 0xCB,  0x00};
+		sprintf(lcdAnswer[0],"%s %d/%d",autoOn, meas_data.probInKanistra, settings.retain.nakop_SV);
+		//Отбор через n с
+		char next[] = {0xCE, 0xF2, 0xE1, 0xEE, 0xF0, 0x20, 0xF7, 0xE5, 0xF0, 0xE5, 0xE7,  0x00};
+		// Накопитель полный
+		char full[] = {0xCD, 0xE0, 0xEA, 0xEE, 0xEF, 0xE8, 0xF2, 0xE5, 0xEB, 0xFC, 0x20, 0xEF, 0xEE, 0xEB, 0xED, 0xFB, 0xE9,  0x00};
+
+		if(meas_data.nakopitelFull)
+		{
+			memcpy(lcdAnswer[2],full,sizeof(full));
+		}
+		else
+		{
+			if(meas_data.probotbor_ready)sprintf(lcdAnswer[2],"%s %d c",next, meas_data.toNextOtborTime);
+		}
+
 	}
 	else
 	{
-		memcpy(lcdAnswer[0],"Auto mode OFF",strlen("Auto mode OFF"));
+		//Aвто ОТКЛ
+		char  autoOff[] = {0x41, 0xE2, 0xF2, 0xEE, 0x20, 0xCE, 0xD2, 0xCA, 0xCB,  0x00};
+		sprintf(lcdAnswer[0],"%s %d/%d",autoOff, meas_data.probInKanistra, settings.retain.nakop_SV);
 	}
 
 	if(meas_data.probotbor_ready)
 	{
-		memcpy(lcdAnswer[1],"Ready for selection",strlen("Ready for selection"));
+		//Готов к отбору
+		char  ready[] = {0xC3,0xEE,0xF2,0xEE,0xE2,0x20,0xEA,0x20,0xEE,0xF2,0xE1,0xEE,0xF0,0xF3};
+		memcpy(lcdAnswer[1],ready,sizeof(ready));
 	}
 	else if(meas_data.probotbor_busy)
 	{
-		memcpy(lcdAnswer[1],"Executing selection",strlen("Executing selection"));
+		//Выполняется отбор
+		char  execSel[] = {0xC2,0xFB,0xEF,0xEE,0xEB,0xED,0xFF,0xE5,0xF2,0xF1,0xFF,0x20,0xEE,0xF2,0xE1,0xEE,0xF0};
+		memcpy(lcdAnswer[1],execSel,sizeof(execSel));
 	}
 	else if(meas_data.vozvrat_probotbor_busy)
 	{
-		memcpy(lcdAnswer[1],"Executing return",strlen("Executing return"));
+		//Выполняется возврат
+		char  execRet[] = {0xC2,0xFB,0xEF,0xEE,0xEB,0xED,0xFF,0xE5,0xF2,0xF1,0xFF,0x20,0xE2,0xEE,0xE7,0xE2,0xF0,0xE0,0xF2};
+		memcpy(lcdAnswer[1],execRet,sizeof(execRet));
 	}
 	else if(*((uint16_t*)&meas_data.errors))
 	{
-		memcpy(lcdAnswer[1],"Errors, press F4",strlen("Errors, press F4"));
+		// Ошибки, нажмите F4
+		char err[] = {0xCE, 0xF8, 0xE8, 0xE1, 0xEA, 0xE8, 0x2C, 0x20, 0xED, 0xE0, 0xE6, 0xEC, 0xE8, 0xF2, 0xE5, 0x20, 0x46, 0x34,  0x00};
+		memcpy(lcdAnswer[1],err,sizeof(err));
 	}
-	memcpy(lcdAnswer[3]+3,"Indication->Enter",strlen("Indication->Enter"));
+	// Мониторинг->Enter
+	char toMonitor[] = {0xCC, 0xEE, 0xED, 0xE8, 0xF2, 0xEE, 0xF0, 0xE8, 0xED, 0xE3, 0x2D, 0x3E, 0x45, 0x6E, 0x74, 0x65, 0x72};
+	memcpy(lcdAnswer[3]+3,toMonitor,sizeof(toMonitor));
 	return 1;
 
 }
@@ -505,7 +589,14 @@ static uint8_t ShowMainDisplay()
 static uint8_t OnDownPressKey()
 {
 	if(currentParameters == NULL)return 0; // Если находимся на главном экране, то не реагируем
-	if(editMode)return 0; // Если находимся в режиме редактирования, то не реагируем
+	if(editMode)
+	{
+		Row *par = currentParameters+paramIndex;
+		if(par->isEnum)return 0;
+		DecIncSymbol(editedValue+currentCursorPosition, 0);
+		ShowParameter(par);
+		return 1;
+	}
 	if(paramIndex>=currentParamLength-1)return 0;// Если курсор находится внизу, не реагируем
 	if(currentParameters == Errors)
 	{
@@ -580,7 +671,14 @@ static uint8_t OnRightPressKey()
 static uint8_t OnUpPressKey()
 {
 	if(currentParameters == NULL)return 0; // Если находимся на главном экране, то не реагируем
-	if(editMode)return 0; // Если находимся в режиме редактирования, то не реагируем
+	if(editMode)
+	{
+		Row *par = currentParameters+paramIndex;
+		if(par->isEnum)return 0;
+		DecIncSymbol(editedValue+currentCursorPosition, 1);
+		ShowParameter(par);
+		return 1;
+	}
 	if(paramIndex<=0)return 0;// Если курсор находится ddth[e, не реагируем
 	if(currentParameters == Errors)
 	{
@@ -609,7 +707,7 @@ static uint8_t OnF2PressKey()
 	currentParamLength = sizeof(probotbor_parameters)/sizeof(Row);
 	editMode = 0;
 	groupParamName = processParametersName;
-	groupParamNameLength = strlen(processParametersName);
+	groupParamNameLength = sizeof(processParametersName);
 	ShowParameter(currentParameters);
 	return 1;
 }
@@ -640,13 +738,12 @@ static uint8_t OnEscPressKey()
 {
 	currentCursorPosition = -1;
 	if(currentParameters==NULL)return 0;
-	if(currentParameters==Errors)return 0;
-	if(currentParameters==indication_rows)
+	if(!editMode)
 	{
 		currentParameters = NULL;
 		return ShowMainDisplay();
 	}
-	else if(editMode)
+	else
 	{
 		editMode = 0;
 		ShowParameter(currentParameters+paramIndex);
@@ -700,19 +797,28 @@ static void ShowParameter(Row *parameter)
 	{
 		if(!editMode)
 		{
-			strncpy(lcdAnswer[3]+9,"Edit->Enter", strlen("Edit->Enter"));
+			//Изм.->Enter
+			char edit[] = {0xC8, 0xE7, 0xEC, 0x2E, 0x2D, 0x3E, 0x45, 0x6E, 0x74, 0x65, 0x72};
+			strncpy(lcdAnswer[3]+9, edit, sizeof(edit));
 		}
 		else
 		{
-			strncpy(lcdAnswer[3],"Back->Esc", strlen("Back->Esc"));
-			strncpy(lcdAnswer[3]+11,"Ok->Enter", strlen("Ok->Enter"));
+			// Назад->Esc
+			char back[] = {0xCD, 0xE0, 0xE7, 0xE0, 0xE4, 0x2D, 0x3E, 0x45, 0x73, 0x63};
+			memcpy(lcdAnswer[3],back, sizeof(back));
+			// Ok->Enter
+			char ok[] = { 0x4F, 0x6B, 0x2D, 0x3E, 0x45, 0x6E, 0x74, 0x65, 0x72};
+			memcpy(lcdAnswer[3]+11,ok, sizeof(ok));
+
 		}
 
 
 	}
 	else if(currentParameters == indication_rows)
 	{
-		strncpy(lcdAnswer[3]+7,"To main-> Esc", strlen("To main-> Esc"));
+		//Главная->Esc
+		char toMain[] = {0xC3, 0xEB, 0xE0, 0xE2, 0xED, 0xE0, 0xFF, 0x2D, 0x3E, 0x45, 0x73, 0x63,  0x00};
+		memcpy(lcdAnswer[3]+8,toMain, sizeof(toMain));
 	}
 }
 
@@ -725,7 +831,9 @@ static uint8_t ShowErrors()
 {
 	GetAllErrors();
 	Clear();
-	strncpy(lcdAnswer[0],"Errors", strlen("Errors"));
+	//Ошибки
+	char erors[] = {0xCE, 0xF8, 0xE8, 0xE1, 0xEA, 0xE8,  0x00};
+	memcpy(lcdAnswer[0],erors, sizeof(erors));
 	if(err_count==0)return 1;
 	if(paramIndex>=err_count-1)paramIndex = err_count==0 ? 0 : err_count-1;
 	for (int i = paramIndex; i < Min(err_count, paramIndex+3); ++i) {
@@ -791,6 +899,12 @@ static uint8_t GetAllErrors()
 		errors_info[err_count].errorName = Errors[8].name;
 		err_count++;
 	}
+	if(meas_data.errors.full_nakop_err)
+{
+		errors_info[err_count].num = err_count+1;
+		errors_info[err_count].errorName = Errors[9].name;
+		err_count++;
+}
 	return 1;
 
 }
@@ -855,7 +969,7 @@ static void Print(Row *parameter, uint8_t index)
 	}
 	switch (parameter->type) {
 		case ROW_ETH_ADDR:
-			sprintf(lcdAnswer[index]+parameter->param_pos,"%d.%d.%d.%d",*((uint16_t*)parameter->data),*(((uint16_t*)parameter->data)+1),*(((uint16_t*)parameter->data)+2),*(((uint16_t*)parameter->data)+3));
+			sprintf(lcdAnswer[index]+parameter->param_pos,"%03d.%03d.%03d.%03d",*((uint16_t*)parameter->data),*(((uint16_t*)parameter->data)+1),*(((uint16_t*)parameter->data)+2),*(((uint16_t*)parameter->data)+3));
 			break;
 		case ROW_USHORT:
 			sprintf(lcdAnswer[index]+parameter->param_pos,"%d",*((uint16_t*)parameter->data));
@@ -889,6 +1003,29 @@ static void AcceptEdit(Row *par)
 				break;
 			case ROW_FLOAT:
 				*((float*)par->data) = currentEnumKey;
+				break;
+			default:
+				break;
+		}
+	}
+	else
+	{
+		int tmpi = 0;
+		float tmpf;
+		switch (par->type) {
+			case ROW_ETH_ADDR:
+				ParseEthernetAddress(par);
+				break;
+			case ROW_FLOAT:
+				sscanf(editedValue+par->param_pos, "%f", (float*)par->data);
+				break;
+			case ROW_UINT:
+				sscanf(editedValue+par->param_pos, "%d", &tmpi);
+				*((uint32_t*)(par->data)) = tmpi;
+				break;
+			case ROW_USHORT:
+				sscanf(editedValue+par->param_pos, "%d", &tmpi);
+				*((uint16_t*)(par->data)) = (uint16_t)tmpi;
 				break;
 			default:
 				break;
@@ -946,6 +1083,7 @@ static uint8_t OnNumberPressKey(uint8_t key)
 			break;
 	}
 	editedValue[currentCursorPosition] = 48+key;
+	ShiftCursor(1, par, 1);
 	ShowParameter(par);
 	return 1;
 }
@@ -978,7 +1116,7 @@ static uint8_t OnDecPressKey()
 	Row *par = currentParameters+paramIndex;
 	switch (par->type) {
 		case ROW_ETH_ADDR:
-			return;
+			return 0;
 		default:
 			for (i = 19; i > par->param_pos; --i) {
 				editedValue[i] = editedValue[i-1];
@@ -986,8 +1124,38 @@ static uint8_t OnDecPressKey()
 			break;
 	}
 	editedValue[currentCursorPosition] = '.';
+	ShiftCursor(1, par, 1);
 	ShowParameter(par);
 	return 1;
 }
 
+static void ParseEthernetAddress(Row *par)
+{
+	int tmp;
+	char *p = editedValue+par->param_pos;
+	for (int i = 0; i < 4; ++i) {
+		sscanf(p, "%d", &tmp);
+		p = strchr(p, '.');
+		if(p!=NULL)p=p+1;
+		*((uint16_t*)par->data+i) = tmp%256;
+	}
+}
+
+static uint8_t IsNumber(char *symbol)
+{
+	return *symbol>=48 && symbol<=57;
+}
+
+static void DecIncSymbol(char *symbol, uint8_t dir)
+{
+	if(!IsNumber(symbol))return;
+	if(dir)
+	{
+		*symbol = *symbol < 57 ? *symbol+1 : 48;
+	}
+	else
+	{
+		*symbol = *symbol > 48 ? *symbol-1 : 57;
+	}
+}
 

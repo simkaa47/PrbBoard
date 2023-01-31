@@ -1,8 +1,0 @@
-keyboard.c:43:6:keyscan_thread	48	static
-keyboard.c:91:13:Tact_pins	8	static
-keyboard.c:148:13:Key_Read	16	static
-keyboard.c:158:13:key_filter_all	16	static
-keyboard.c:167:13:key_filter	16	static
-keyboard.c:180:13:GetPositiveFront	16	static
-keyboard.c:190:13:PrintSymbol	16	static
-keyboard.c:198:13:SendToLcd	8	static

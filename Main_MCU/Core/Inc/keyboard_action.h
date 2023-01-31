@@ -32,7 +32,7 @@ typedef struct
 
 typedef struct
 {
-	char *name;
+	const char *name;
 	uint8_t isEdited;
 	uint8_t name_len;
 	uint8_t param_len;

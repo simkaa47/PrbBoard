@@ -81,7 +81,8 @@ typedef struct
 	Ethernet_Settings eth_sett;
 	uint16_t prob_toHomeTime;
 	uint16_t prob_toWorkTime;
-	uint16_t automat_timer;
+	uint16_t nakop_SV;
+	uint32_t automat_timer;
 
 
 }Retain;
@@ -97,6 +98,7 @@ typedef struct
 	unsigned int timeout_moving_right_err:1;
 	unsigned int timeout_moving_left_err:1;
 	unsigned int need_return_err:1;
+	unsigned int full_nakop_err:1;
 
 }Errors_Struct;
 
@@ -109,10 +111,6 @@ typedef struct
 	uint16_t start_vozvrat;
 	uint16_t data[50];
 }Non_Retain;
-
-
-
-
 
 typedef struct
 {
@@ -131,7 +129,9 @@ typedef struct
 	uint16_t probotbor_busy;
 	uint16_t vozvrat_probotbor_busy;
 	uint16_t automat_mode;
-	uint16_t toNextOtborTime;
+	uint16_t probInKanistra;
+	uint16_t nakopitelFull;
+	uint32_t toNextOtborTime;
 	Errors_Struct errors;
     uint16_t data[40];
 }Meas_Data;
