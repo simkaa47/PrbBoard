@@ -1,2 +1,2 @@
-../Core/Src/universal_control.c:11:30:universal_control_init	16	static
-../Core/Src/universal_control.c:26:6:universal_control_execute	40	static
+universal_control.c:11:30:universal_control_init	16	static
+universal_control.c:26:6:universal_control_execute	40	static

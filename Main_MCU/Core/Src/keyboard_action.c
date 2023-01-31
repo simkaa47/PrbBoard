@@ -54,6 +54,10 @@ static Dictionary *FindDictionaryFromValue(float value, Dictionary *dictionary, 
 static int FindIndexFromValue(float value, Dictionary *dictionary, uint8_t dict_len);
 static void Print(Row *parameter, uint8_t index);
 static void AcceptEdit(Row *parameter);
+static int ShiftCursor(uint8_t direction, Row *par, uint8_t stepSize);
+static uint8_t OnNumberPressKey(uint8_t key);
+static uint8_t OnDeletePressKey();
+static uint8_t OnDecPressKey();
 
 Dictionary baudrates[]={
 		{
@@ -275,7 +279,7 @@ int OnKeyPress(uint8_t *req,uint8_t req_length, uint8_t *answer)
 	}
 	else if(!strncmp(p, "Delete", strlen("Delete")))
 	{
-		return get_answer(strlen("Delete"),req,answer);
+		if(!OnDeletePressKey())return 0;
 	}
 	else if(!strncmp(p, "Up", strlen("Up")))
 	{
@@ -312,47 +316,47 @@ int OnKeyPress(uint8_t *req,uint8_t req_length, uint8_t *answer)
 	}
 	else if(!strncmp(p, "NumPad0", strlen("NumPad0")))
 	{
-		return 0;
+		if(!OnNumberPressKey(0))return 0;
 	}
 	else if(!strncmp(p, "NumPad1", strlen("NumPad1")))
 	{
-		return 0;
+		if(!OnNumberPressKey(1))return 0;
 	}
 	else if(!strncmp(p, "NumPad2", strlen("NumPad2")))
 	{
-		return 0;
+		if(!OnNumberPressKey(2))return 0;
 	}
 	else if(!strncmp(p, "NumPad3", strlen("NumPad3")))
 	{
-		return 0;
+		if(!OnNumberPressKey(3))return 0;
 	}
 	else if(!strncmp(p, "NumPad4", strlen("NumPad4")))
 	{
-		return 0;
+		if(!OnNumberPressKey(4))return 0;
 	}
 	else if(!strncmp(p, "NumPad5", strlen("NumPad5")))
 	{
-		return 0;
+		if(!OnNumberPressKey(5))return 0;
 	}
 	else if(!strncmp(p, "NumPad6", strlen("NumPad6")))
 	{
-		return 0;
+		if(!OnNumberPressKey(6))return 0;
 	}
 	else if(!strncmp(p, "NumPad7", strlen("NumPad7")))
 	{
-		return 0;
+		if(!OnNumberPressKey(7))return 0;
 	}
 	else if(!strncmp(p, "NumPad8", strlen("NumPad8")))
 	{
-		return 0;
+		if(!OnNumberPressKey(8))return 0;
 	}
 	else if(!strncmp(p, "NumPad9", strlen("NumPad9")))
 	{
-		return 0;
+		if(!OnNumberPressKey(9))return 0;
 	}
 	else if(!strncmp(p, "Dec", strlen("Dec")))
 	{
-		return 0;
+		if(!OnDecPressKey())return 0;
 	}
 	else return 0;
 	memcpy(answer,lcdAnswer,80);
@@ -532,6 +536,14 @@ static uint8_t OnLeftPressKey()
 		ShowParameter(par);
 		return 1;
 
+
+	}
+	else
+	{
+		currentCursorPosition = ShiftCursor(0, par, 1);
+		ShowParameter(par);
+		return 1;
+
 	}
 	return 0;
 }
@@ -555,6 +567,12 @@ static uint8_t OnRightPressKey()
 		ShowParameter(par);
 		return 1;
 
+	}
+	else
+	{
+		currentCursorPosition = ShiftCursor(1, par, 1);
+		ShowParameter(par);
+		return 1;
 	}
 	return 0;
 }
@@ -882,9 +900,94 @@ static void AcceptEdit(Row *par)
 
 }
 
+// direction == 0 ->left
+// direction == 1 ->right
+// return position
+static int ShiftCursor(uint8_t direction, Row *par, uint8_t stepSize)
+{
+	if(!editMode)return -1;
+	if(par->isEnum)return -1;
+	int tempPos = direction ? currentCursorPosition+stepSize : currentCursorPosition-stepSize;
+	// Проверка на границы
 
+	if(tempPos<par->param_pos)tempPos = par->param_pos;
+	if(tempPos>19)tempPos = 19;
+	while(editedValue[tempPos]==0 && tempPos>par->param_pos)
+	{
+		tempPos--;
+	}
+	switch (par->type) {
+		case ROW_ETH_ADDR:
+			if(editedValue[tempPos]=='.')
+			{
+				tempPos = direction ? tempPos+1 : tempPos-1;
+			}
+			break;
+		default:
+			break;
+	}
+	return tempPos;
+}
 
+static uint8_t OnNumberPressKey(uint8_t key)
+{
+	if(key>9)return 0;
+	uint8_t i = 0;
+	if(!editMode)return 0;
+	if(currentParameters==NULL)return 0;
+	Row *par = currentParameters+paramIndex;
+	switch (par->type) {
+		case ROW_ETH_ADDR:
+			break;
+		default:
+			for (i = 19; i > par->param_pos; --i) {
+				editedValue[i] = editedValue[i-1];
+			}
+			break;
+	}
+	editedValue[currentCursorPosition] = 48+key;
+	ShowParameter(par);
+	return 1;
+}
 
+static uint8_t OnDeletePressKey()
+{
+	uint8_t i = 0;
+	if(!editMode)return 0;
+	if(currentParameters==NULL)return 0;
+	Row *par = currentParameters+paramIndex;
+	switch (par->type) {
+		case ROW_ETH_ADDR:
+			return 0;
+		default:
+			for (i = par->param_pos; i < 19; ++i) {
+				editedValue[i] = editedValue[i+1];
+			}
+			editedValue[19]=0;
+			break;
+	}
+	ShowParameter(par);
+	return 1;
+}
 
+static uint8_t OnDecPressKey()
+{
+	uint8_t i = 0;
+	if(!editMode)return 0;
+	if(currentParameters==NULL)return 0;
+	Row *par = currentParameters+paramIndex;
+	switch (par->type) {
+		case ROW_ETH_ADDR:
+			return;
+		default:
+			for (i = 19; i > par->param_pos; --i) {
+				editedValue[i] = editedValue[i-1];
+			}
+			break;
+	}
+	editedValue[currentCursorPosition] = '.';
+	ShowParameter(par);
+	return 1;
+}
 
 

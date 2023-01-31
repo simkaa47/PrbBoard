@@ -1,5 +1,5 @@
-../Core/Src/timer.c:25:6:Start_Timers	8	static
-../Core/Src/timer.c:31:18:Timer_Init	16	static
-../Core/Src/timer.c:37:25:Push_To_List	24	static
-../Core/Src/timer.c:61:6:UpdateTimers	16	static
-../Core/Src/timer.c:72:13:UpdateTimer	16	static
+timer.c:25:6:Start_Timers	8	static
+timer.c:31:18:Timer_Init	16	static
+timer.c:37:25:Push_To_List	24	static
+timer.c:61:6:UpdateTimers	16	static
+timer.c:72:13:UpdateTimer	16	static
