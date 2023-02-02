@@ -24,15 +24,25 @@ char errorsName[] = {0xCE, 0xF8, 0xE8, 0xE1, 0xEA, 0xE8,0x00};
 char indicationName[] = {0xCC, 0xEE, 0xED, 0xE8, 0xF2, 0xEE, 0xF0, 0xE8, 0xED, 0xE3,0x00};
 
 // Ошибки
+//Нет канистры
 const char errKanistra[] = {0xCD, 0xE5, 0xF2, 0x20, 0xEA, 0xE0, 0xED, 0xE8, 0xF1, 0xF2, 0xF0, 0xFB, 0x00};
+//Дверь канистры
 const char errDoorKanistra[] = {0xC4, 0xE2, 0xE5, 0xF0, 0xFC, 0x20, 0xEA, 0xE0, 0xED, 0xE8, 0xF1, 0xF2, 0xF0, 0xFB,0x00};
+//Ошибка ПЧ
 const char errUZ[] = {0xCE, 0xF8, 0xE8, 0xE1, 0xEA, 0xE0, 0x20, 0xCF, 0xD7, 0x00};
+//Аварийный стоп
 const char abortErr[] = {0xC0, 0xE2, 0xE0, 0xF0, 0xE8, 0xE9, 0xED, 0xFB, 0xE9, 0x20, 0xF1, 0xF2, 0xEE, 0xEF, 0x00};
+//Ав. конц. слева
 const char sqLeft[] = {0xC0, 0xE2, 0x2E, 0x20, 0xEA, 0xEE, 0xED, 0xF6, 0x2E, 0x20, 0xF1, 0xEB, 0xE5, 0xE2, 0xE0, 0x00};
+//Ав. конц. справа
 const char sqRight[] = {0xC0, 0xE2, 0x2E, 0x20, 0xEA, 0xEE, 0xED, 0xF6, 0x2E, 0x20, 0xF1, 0xEF, 0xF0, 0xE0, 0xE2, 0xE0, 0x00};
+//Тайм-аут вправо
 const char timeoutRight[] = {0xD2, 0xE0, 0xE9, 0xEC, 0x2D, 0xE0, 0xF3, 0xF2, 0x20, 0xE2, 0xEF, 0xF0, 0xE0, 0xE2, 0xEE, 0x00};
+//Тайм-аут влево
 const char timeoutLeft[] = {0xD2, 0xE0, 0xE9, 0xEC, 0x2D, 0xE0, 0xF3, 0xF2, 0x20, 0xE2, 0xEB, 0xE5, 0xE2, 0xEE, 0x00};
+//Необходим возврат
 const char needReturn[] = {0xCD, 0xE5, 0xEE, 0xE1, 0xF5, 0xEE, 0xE4, 0xE8, 0xEC, 0x20, 0xE2, 0xEE, 0xE7, 0xE2, 0xF0, 0xE0, 0xF2, 0x00};
+//Накопитель полный
 const char fullNakop[] = {0xCD, 0xE0, 0xEA, 0xEE, 0xEF, 0xE8, 0xF2, 0xE5, 0xEB, 0xFC, 0x20, 0xEF, 0xEE, 0xEB, 0xED, 0xFB, 0xE9,  0x00};
 
 // Паратметры проботборника
@@ -99,6 +109,7 @@ static uint8_t OnDecPressKey();
 static void ParseEthernetAddress(Row *par);
 static uint8_t IsNumber(char *symbol);
 static void DecIncSymbol(char *symbol, uint8_t dir);
+static void GetEditedValue(Row *par);
 
 
 Dictionary baudrates[]={
@@ -213,7 +224,7 @@ Row probotbor_parameters[] = {
 				.data = (uint8_t*)(&settings.retain.automat_timer),
 				.isEnum = 0,
 				.name_len = sizeof(parAutoSel3),
-				.param_len = 3,
+				.param_len = 5,
 				.param_pos = 3,
 				.type = ROW_UINT
 		},
@@ -223,7 +234,7 @@ Row probotbor_parameters[] = {
 				.data = (uint8_t*)(&settings.retain.nakop_SV),
 				.isEnum = 0,
 				.name_len = sizeof(nakopSV4),
-				.param_len = 3,
+				.param_len = 2,
 				.param_pos = 3,
 				.type = ROW_USHORT
 		}
@@ -247,7 +258,6 @@ Row commParameters[] = {
 				.data = (uint8_t*)(&settings.retain.eth_sett.mask0),
 				.isEnum = 0,
 				.name_len = sizeof(parMask2),
-				.param_len = 15,
 				.param_pos = 2,
 				.type = ROW_ETH_ADDR
 		},
@@ -289,6 +299,7 @@ Row commParameters[] = {
 				.isEnum = 0,
 				.name_len = sizeof(parModbAddr),
 				.param_pos = 2,
+				.param_len = 3,
 				.type = ROW_USHORT
 		}
 
@@ -321,7 +332,7 @@ Row indication_rows[] = {
 				.data = (uint8_t*)(&meas_data.probInKanistra),
 				.isEnum = 0,
 				.name_len = sizeof(parNakopCV),
-				.param_len = 3,
+				.param_len = 2,
 				.param_pos = 3,
 				.type = ROW_USHORT
 		},
@@ -424,13 +435,13 @@ int OnKeyPress(uint8_t *req,uint8_t req_length, uint8_t *answer)
 	memcpy(answer,lcdAnswer,80);
 	if(currentCursorPosition==-1)
 	{
-		//answer[80] = 255;
+		answer[80] = 255;
 		return -1;
 
 	}
 	else
 	{
-		//answer[80] = currentCursorPosition+40;
+		answer[80] = currentCursorPosition+40;
 	}
 	return currentCursorPosition+40;
 }
@@ -458,13 +469,11 @@ static uint8_t OnEnterPressAction()
 
 			if(par->isEdited)
 			{
+				memset(editedValue,0,20);
 				Clear();
 				if(!par->isEnum)
 				{
-					Print(par,2);
-					for (int i = 0; i < 20; ++i) {
-						editedValue[i] = lcdAnswer[2][i];
-					}
+					GetEditedValue(par);
 					editMode = 1;
 					currentCursorPosition = par->param_pos;
 					ShowParameter(par);
@@ -974,6 +983,9 @@ static void Print(Row *parameter, uint8_t index)
 		case ROW_USHORT:
 			sprintf(lcdAnswer[index]+parameter->param_pos,"%d",*((uint16_t*)parameter->data));
 			break;
+		case ROW_FLOAT:
+			sprintf(lcdAnswer[index]+parameter->param_pos,"%f",*((float*)parameter->data));
+			break;
 		case ROW_UINT:
 			sprintf(lcdAnswer[index]+parameter->param_pos,"%d",*((uint32_t*)parameter->data));
 			break;
@@ -1077,20 +1089,17 @@ static uint8_t OnNumberPressKey(uint8_t key)
 		case ROW_ETH_ADDR:
 			break;
 		default:
-			for (i = 19; i > par->param_pos; --i) {
-				editedValue[i] = editedValue[i-1];
-			}
 			break;
 	}
 	editedValue[currentCursorPosition] = 48+key;
-	ShiftCursor(1, par, 1);
+	currentCursorPosition = ShiftCursor(1, par, 1);
 	ShowParameter(par);
 	return 1;
 }
 
 static uint8_t OnDeletePressKey()
 {
-	uint8_t i = 0;
+	uint8_t i;
 	if(!editMode)return 0;
 	if(currentParameters==NULL)return 0;
 	Row *par = currentParameters+paramIndex;
@@ -1098,7 +1107,8 @@ static uint8_t OnDeletePressKey()
 		case ROW_ETH_ADDR:
 			return 0;
 		default:
-			for (i = par->param_pos; i < 19; ++i) {
+			editedValue[par->param_len+par->param_pos-1]='0';
+			for (i = currentCursorPosition; i < par->param_len+par->param_pos-1; ++i) {
 				editedValue[i] = editedValue[i+1];
 			}
 			editedValue[19]=0;
@@ -1110,21 +1120,20 @@ static uint8_t OnDeletePressKey()
 
 static uint8_t OnDecPressKey()
 {
+
 	uint8_t i = 0;
 	if(!editMode)return 0;
 	if(currentParameters==NULL)return 0;
 	Row *par = currentParameters+paramIndex;
+	if(par->type != ROW_FLOAT)return 0;
 	switch (par->type) {
 		case ROW_ETH_ADDR:
 			return 0;
 		default:
-			for (i = 19; i > par->param_pos; --i) {
-				editedValue[i] = editedValue[i-1];
-			}
 			break;
 	}
 	editedValue[currentCursorPosition] = '.';
-	ShiftCursor(1, par, 1);
+	currentCursorPosition = ShiftCursor(1, par, 1);
 	ShowParameter(par);
 	return 1;
 }
@@ -1143,7 +1152,7 @@ static void ParseEthernetAddress(Row *par)
 
 static uint8_t IsNumber(char *symbol)
 {
-	return *symbol>=48 && symbol<=57;
+	return *symbol>=48 && *symbol<=57;
 }
 
 static void DecIncSymbol(char *symbol, uint8_t dir)
@@ -1157,5 +1166,27 @@ static void DecIncSymbol(char *symbol, uint8_t dir)
 	{
 		*symbol = *symbol > 48 ? *symbol-1 : 57;
 	}
+}
+
+static void GetEditedValue(Row *par)
+{
+	if(par == NULL)return;
+	switch (par->type) {
+		case ROW_ETH_ADDR:
+			sprintf(editedValue+par->param_pos,"%03d.%03d.%03d.%03d",*((uint16_t*)par->data),*(((uint16_t*)par->data)+1),*(((uint16_t*)par->data)+2),*(((uint16_t*)par->data)+3));
+			break;
+		case ROW_UINT:
+			sprintf(editedValue+par->param_pos,"%0*d",par->param_len, *((uint32_t*)par->data));
+			break;
+		case ROW_USHORT:
+			sprintf(editedValue+par->param_pos,"%0*d",par->param_len, *((uint16_t*)par->data));
+			break;
+		case ROW_FLOAT:
+			sprintf(editedValue+par->param_pos,"%0*f",par->param_len, *((float*)par->data));
+			break;
+		default:
+			break;
+	}
+
 }
 
