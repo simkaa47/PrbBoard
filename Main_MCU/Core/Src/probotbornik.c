@@ -29,6 +29,12 @@ uint8_t lastSbMakeVozvrat;
 uint8_t rtSbMakeVozvrat;
 
 
+
+
+uint8_t auto_mode;
+uint32_t select_period;
+
+
 TON sqHomeTON;
 TON sqWorkTON;
 TON automatTON;
@@ -45,9 +51,12 @@ static void StopCycles();
 static void Indication();
 static void GetPositiveFronts();
 static void NakopitelCheck();
+static void GetClientInfo();
+static void LocalRemoteControl();
 
 void probotbor_process()
 {
+	LocalRemoteControl();
 	SetTimers();
 	if(!initialized)
 	{
@@ -65,6 +74,7 @@ void probotbor_process()
 		startOtborCommand = 1;
 	}
 	Indication();
+	GetClientInfo();
 
 }
 
@@ -78,6 +88,7 @@ static void GetErrors()
 	meas_data.errors.sq_left_err = d_inputs.sq_kovsh_prob_left_1;
 	meas_data.errors.sq_right_err = d_inputs.sq_kovsh_prob_right_1;
 	meas_data.errors.full_nakop_err = meas_data.nakopitelFull;
+
 
 	//Timeouts
 	if(sqHomeTON.OUT){
@@ -94,6 +105,19 @@ static void GetErrors()
 	// Need Return
 	meas_data.errors.need_return_err = (!d_outputs.uz_prob_forv && !d_outputs.uz_prob_rev) &&
 			(!d_inputs.sq_kovsh_prob_left_2 && !d_inputs.sq_kovsh_prob_right_2);
+
+	// Remote stops
+	if(settings.retain.remote_mode)
+	{
+		meas_data.errors.conveyer_off_err = !settings.client.from.konveyer_on;
+		meas_data.errors.no_concentrat_err = !settings.client.from.koncentrat_on;
+	}
+	else
+	{
+		meas_data.errors.conveyer_off_err = 0;
+		meas_data.errors.no_concentrat_err = 0;
+
+	}
 
 }
 
@@ -120,11 +144,29 @@ static void SetTimers()
 	sqWorkTON.SV = settings.retain.prob_toWorkTime * 1000;
 
 	// Таймер автоматической работы
-	automatTON.IN = d_inputs.sb_auto_local && !cycle_probotbor && !meas_data.nakopitelFull;
-	automatTON.SV = settings.retain.automat_timer * 1000;
+	automatTON.IN = auto_mode && !cycle_probotbor && !meas_data.nakopitelFull;
+	automatTON.SV = select_period * 1000;
 
 	// Осталось до следующей пробы
 }
+
+static void LocalRemoteControl()
+{
+	auto_mode = settings.retain.remote_mode ? settings.client.from.auto_on : d_inputs.sb_auto_local;
+	select_period = settings.retain.remote_mode ? (uint32_t)settings.client.from.select_period : settings.retain.automat_timer;
+	// действия по нажатию кнопки
+	if((d_inputs.sb_make_proba && !settings.retain.remote_mode) ||
+				(settings.client.from.select_cmd && settings.retain.remote_mode))
+	{
+		if(!auto_mode)
+		{
+			if(settings.retain.remote_mode)settings.client.from.select_cmd = 0;
+						startOtborCommand = 1;
+		}
+	}
+
+}
+
 
 static void Moving()
 {
@@ -206,14 +248,6 @@ static void StopCycles()
 
 static void OnCommandCycle()
 {
-	// действия по нажатию кнопки
-	if(d_inputs.sb_make_proba ||
-			settings.non_retain.start_otbor)
-	{
-		settings.non_retain.start_otbor = 0;
-		startOtborCommand = 1;
-	}
-
 	if(meas_data.errors.need_return_err &&
 			CheckCriticalError() &&
 			!cycle_vozvrat &&
@@ -258,8 +292,8 @@ static void Indication()
 	meas_data.probotbor_ready = d_outputs.prob_ready;
 	meas_data.probotbor_busy = cycle_probotbor;
 	meas_data.vozvrat_probotbor_busy = cycle_vozvrat;
-	meas_data.automat_mode = d_inputs.sb_auto_local;
-	meas_data.toNextOtborTime = settings.retain.automat_timer - automatTON.ET/1000;
+	meas_data.automat_mode = auto_mode;
+	meas_data.toNextOtborTime = select_period - automatTON.ET/1000;
 }
 
 static void GetPositiveFronts()
@@ -281,6 +315,20 @@ static void NakopitelCheck()
 	if(!d_inputs.sq_kanistra)meas_data.probInKanistra = 0;
 	meas_data.nakopitelFull = meas_data.probInKanistra>=settings.retain.nakop_SV;
 
+}
+
+static void GetClientInfo()
+{
+	settings.client.to.ready_for_select = d_outputs.prob_ready;
+	settings.client.to.automat = auto_mode;
+	settings.client.to.errors = !CheckCommonError();
+	settings.client.to.prob_err = meas_data.errors.need_return_err ||
+			meas_data.errors.sq_left_err || meas_data.errors.sq_right_err || meas_data.errors.sb_abort_err
+			|| meas_data.errors.uz_err || meas_data.errors.timeout_moving_left_err || meas_data.errors.timeout_moving_right_err
+			|| meas_data.errors.need_return_err;
+	settings.client.to.timeout_err = meas_data.errors.timeout_moving_left_err || meas_data.errors.timeout_moving_right_err;
+	settings.client.to.sq_kovsh_err = meas_data.errors.need_return_err;
+	settings.client.to.sb_abort_err = meas_data.errors.sb_abort_err;
 }
 
 

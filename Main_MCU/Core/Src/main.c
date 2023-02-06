@@ -131,6 +131,7 @@ int main(void)
   ethernet_reset();
   Analog_Start();
   Start_Timers();
+  settingsLoadFRAM();
 
   /* USER CODE END 2 */
 
@@ -670,9 +671,8 @@ void StartDefaultTask(void const * argument)
   /* init code for LWIP */
   MX_LWIP_Init();
   /* USER CODE BEGIN 5 */
-  int result = 0;
   task_init();
-  result = settingsLoadFRAM();
+  settingsLoadFRAM();
   main_process_init();
   /* Infinite loop */
   for(;;)

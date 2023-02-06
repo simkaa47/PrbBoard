@@ -82,6 +82,7 @@ typedef struct
 	uint16_t prob_toHomeTime;
 	uint16_t prob_toWorkTime;
 	uint16_t nakop_SV;
+	uint16_t remote_mode;
 	uint32_t automat_timer;
 
 
@@ -99,8 +100,45 @@ typedef struct
 	unsigned int timeout_moving_left_err:1;
 	unsigned int need_return_err:1;
 	unsigned int full_nakop_err:1;
+	unsigned int no_concentrat_err:1;
+	unsigned int conveyer_off_err:1;
+	unsigned int remote_stop_err:1;
+
 
 }Errors_Struct;
+
+typedef struct
+{
+	unsigned short ready_for_select :1;
+	unsigned short automat :1;
+	unsigned short errors :1;
+	unsigned short prob_err :1;
+	unsigned short res_0 :1;
+	unsigned short res_1 :1;
+	unsigned short timeout_err :1;
+	unsigned short sq_kovsh_err :1;
+	unsigned short sb_abort_err :1;
+
+}To_Client_Info;
+
+
+typedef struct
+{
+	unsigned short auto_on :1;
+	unsigned short abort :1;
+	unsigned short koncentrat_on :1;
+	unsigned short konveyer_on :1;
+	unsigned short select_cmd :1;
+	float select_period;
+
+}From_Client_Info;
+
+typedef struct
+{
+	To_Client_Info to;
+	From_Client_Info from;
+
+}Client_Info;
 
 
 
@@ -114,6 +152,7 @@ typedef struct
 
 typedef struct
 {
+	Client_Info client;
     Retain retain;
     Non_Retain non_retain;
 
