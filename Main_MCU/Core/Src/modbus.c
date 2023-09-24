@@ -40,7 +40,7 @@ void ModbusInit()
 {
 	holding_pointer = (uint16_t*)&settings;
 	reading_pointer = (uint16_t*)&meas_data;
-	holding_size = sizeof(To_Client_Info)/2;
+	holding_size = sizeof(From_Client_Info)/2;
 	reading_size = sizeof(meas_data)/2;
 	if(settings.retain.mb_addr==0)settings.retain.mb_addr = 1;
 }

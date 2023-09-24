@@ -1,0 +1,14 @@
+probotbornik.c:57:6:probotbor_process	8	static
+probotbornik.c:81:13:GetErrors	4	static
+probotbornik.c:124:16:Init_timers	8	static
+probotbornik.c:136:13:SetTimers	4	static
+probotbornik.c:153:13:LocalRemoteControl	4	static
+probotbornik.c:171:13:Moving	8	static
+probotbornik.c:223:16:CheckCommonError	16	static
+probotbornik.c:231:16:CheckCriticalError	16	static
+probotbornik.c:243:13:StopCycles	4	static
+probotbornik.c:249:13:OnCommandCycle	8	static
+probotbornik.c:290:13:Indication	4	static
+probotbornik.c:299:13:GetPositiveFronts	4	static
+probotbornik.c:312:13:NakopitelCheck	4	static
+probotbornik.c:320:13:GetClientInfo	8	static
