@@ -135,6 +135,16 @@ typedef struct
 
 typedef struct
 {
+	To_Client_Info to;
+	From_Client_Info from;
+
+}Client_Info;
+
+
+
+
+typedef struct
+{
 	uint16_t start_otbor;
 	uint16_t start_vozvrat;
 	uint16_t data[50];
@@ -142,7 +152,7 @@ typedef struct
 
 typedef struct
 {
-	From_Client_Info from;
+	Client_Info client;
     Retain retain;
     Non_Retain non_retain;
 
@@ -150,7 +160,6 @@ typedef struct
 
 typedef struct
 {
-	To_Client_Info to;
 	Discrete_Inputs d_inputs;
 	Discrete_Outputs d_outputs;
 	float analog_input;

@@ -109,8 +109,8 @@ static void GetErrors()
 	// Remote stops
 	if(settings.retain.remote_mode)
 	{
-		meas_data.errors.conveyer_off_err = !settings.from.konveyer_on;
-		meas_data.errors.no_concentrat_err = !settings.from.koncentrat_on;
+		meas_data.errors.conveyer_off_err = !settings.client.from.konveyer_on;
+		meas_data.errors.no_concentrat_err = !settings.client.from.koncentrat_on;
 	}
 	else
 	{
@@ -152,15 +152,15 @@ static void SetTimers()
 
 static void LocalRemoteControl()
 {
-	auto_mode = settings.retain.remote_mode ? settings.from.auto_on : d_inputs.sb_auto_local;
-	select_period = settings.retain.remote_mode ? (uint32_t)settings.from.select_period : settings.retain.automat_timer;
+	auto_mode = settings.retain.remote_mode ? settings.client.from.auto_on : d_inputs.sb_auto_local;
+	select_period = settings.retain.remote_mode ? (uint32_t)settings.client.from.select_period : settings.retain.automat_timer;
 	// действия по нажатию кнопки
 	if((d_inputs.sb_make_proba && !settings.retain.remote_mode) ||
-				(settings.from.select_cmd && settings.retain.remote_mode))
+				(settings.client.from.select_cmd && settings.retain.remote_mode))
 	{
 		if(!auto_mode)
 		{
-			if(settings.retain.remote_mode)settings.from.select_cmd = 0;
+			if(settings.retain.remote_mode)settings.client.from.select_cmd = 0;
 						startOtborCommand = 1;
 		}
 	}
@@ -319,16 +319,16 @@ static void NakopitelCheck()
 
 static void GetClientInfo()
 {
-	meas_data.to.ready_for_select = d_outputs.prob_ready;
-	meas_data.to.automat = auto_mode;
-	meas_data.to.errors = !CheckCommonError();
-	meas_data.to.prob_err = meas_data.errors.need_return_err ||
+	settings.client.to.ready_for_select = d_outputs.prob_ready;
+	settings.client.to.automat = auto_mode;
+	settings.client.to.errors = !CheckCommonError();
+	settings.client.to.prob_err = meas_data.errors.need_return_err ||
 			meas_data.errors.sq_left_err || meas_data.errors.sq_right_err || meas_data.errors.sb_abort_err
 			|| meas_data.errors.uz_err || meas_data.errors.timeout_moving_left_err || meas_data.errors.timeout_moving_right_err
 			|| meas_data.errors.need_return_err;
-	meas_data.to.timeout_err = meas_data.errors.timeout_moving_left_err || meas_data.errors.timeout_moving_right_err;
-	meas_data.to.sq_kovsh_err = meas_data.errors.need_return_err;
-	meas_data.to.sb_abort_err = meas_data.errors.sb_abort_err;
+	settings.client.to.timeout_err = meas_data.errors.timeout_moving_left_err || meas_data.errors.timeout_moving_right_err;
+	settings.client.to.sq_kovsh_err = meas_data.errors.need_return_err;
+	settings.client.to.sb_abort_err = meas_data.errors.sb_abort_err;
 }
 
 
