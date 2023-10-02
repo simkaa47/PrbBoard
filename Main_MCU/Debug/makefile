@@ -1,6 +1,6 @@
 ################################################################################
 # Automatically-generated file. Do not edit!
-# Toolchain: GNU Tools for STM32 (9-2020-q2-update)
+# Toolchain: GNU Tools for STM32 (10.3-2021.10)
 ################################################################################
 
 -include ../makefile.init
@@ -58,6 +58,9 @@ BUILD_ARTIFACT := $(BUILD_ARTIFACT_PREFIX)$(BUILD_ARTIFACT_NAME)$(if $(BUILD_ART
 EXECUTABLES += \
 PRB.elf \
 
+MAP_FILES += \
+PRB.map \
+
 SIZE_OUTPUT += \
 default.size.stdout \
 
@@ -78,8 +81,8 @@ all: main-build
 main-build: PRB.elf secondary-outputs
 
 # Tool invocations
-PRB.elf: $(OBJS) $(USER_OBJS) D:\Projects\prb_board\PrbBoard\Main_MCU\STM32F407VGTX_FLASH.ld makefile objects.list $(OPTIONAL_TOOL_DEPS)
-	arm-none-eabi-gcc -o "PRB.elf" @"objects.list" $(USER_OBJS) $(LIBS) -mcpu=cortex-m4 -T"D:\Projects\prb_board\PrbBoard\Main_MCU\STM32F407VGTX_FLASH.ld" --specs=nosys.specs -Wl,-Map="PRB.map" -Wl,--gc-sections -static --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -u _printf_float -u _scanf_float -Wl,--start-group -lc -lm -Wl,--end-group
+PRB.elf PRB.map: $(OBJS) $(USER_OBJS) C:\Users\ivan.liutov\Documents\eliron\PrbBoard\Main_MCU\STM32F407VGTX_FLASH.ld makefile objects.list $(OPTIONAL_TOOL_DEPS)
+	arm-none-eabi-gcc -o "PRB.elf" @"objects.list" $(USER_OBJS) $(LIBS) -mcpu=cortex-m4 -T"C:\Users\ivan.liutov\Documents\eliron\PrbBoard\Main_MCU\STM32F407VGTX_FLASH.ld" --specs=nosys.specs -Wl,-Map="PRB.map" -Wl,--gc-sections -static --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -u _printf_float -u _scanf_float -Wl,--start-group -lc -lm -Wl,--end-group
 	@echo 'Finished building target: $@'
 	@echo ' '
 
@@ -105,7 +108,7 @@ PRB.bin: $(EXECUTABLES) makefile objects.list $(OPTIONAL_TOOL_DEPS)
 
 # Other Targets
 clean:
-	-$(RM) PRB.bin PRB.elf PRB.hex PRB.list default.size.stdout
+	-$(RM) PRB.bin PRB.elf PRB.hex PRB.list PRB.map default.size.stdout
 	-@echo ' '
 
 secondary-outputs: $(SIZE_OUTPUT) $(OBJDUMP_LIST) $(OBJCOPY_HEX) $(OBJCOPY_BIN)

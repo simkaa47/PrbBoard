@@ -88,9 +88,10 @@ void task_init()
 	fre=xPortGetFreeHeapSize();
 	sys_thread_new("uart_thread", uart_thread, (void*)NULL, 512, osPriorityNormal );
 	fre=xPortGetFreeHeapSize();
-	osMailQDef(uart_queue, UART_QUEUE_SIZE, Uart_Queue_Struct);
+	osMailQDef(uart_queue, 10, Uart_Queue_Struct);
 	uart_queue = osMailCreate(osMailQ(uart_queue), NULL);
 	sys_thread_new("keyboard_thread", keyscan_thread, (void*)NULL, 128, osPriorityNormal );
+	fre=xPortGetFreeHeapSize();
 }
 
 /* USER CODE END Application */

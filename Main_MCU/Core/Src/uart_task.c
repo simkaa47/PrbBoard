@@ -75,7 +75,7 @@ static void StartReceive(int index)
 		case 1:
 			if(huart6.hdmarx->State==HAL_DMA_STATE_READY){
 				HAL_UARTEx_ReceiveToIdle_DMA(&huart6, uart_input_buffer[1], UART_INPUT_BUFFER_SZ);
-				__HAL_DMA_DISABLE_IT(&hdma_usart6_rx,DMA_IT_HT);
+				//__HAL_DMA_DISABLE_IT(&hdma_usart6_rx,DMA_IT_HT);
 			}
 			break;
 		default:
@@ -99,7 +99,14 @@ void HAL_UARTEx_RxEventCallback(UART_HandleTypeDef *huart, uint16_t size)
 	}
 	else return;
 	queue_arg = osMailAlloc(uart_queue, 0);
-	if(queue_arg==NULL)return;
+	if(queue_arg==NULL)
+	{
+		if(huart->Instance==USART6)
+		{
+			StartReceive(1);
+		}
+		return;
+	}
 	queue_arg->inpit_size = size;
 	queue_arg->input_pointer = input_pointer;
 	queue_arg->output_pointer = output_pointer;
