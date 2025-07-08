@@ -88,7 +88,7 @@ static void GetErrors()
 	meas_data.errors.sq_left_err = d_inputs.sq_kovsh_prob_left_1;
 	meas_data.errors.sq_right_err = d_inputs.sq_kovsh_prob_right_1;
 	meas_data.errors.full_nakop_err = meas_data.nakopitelFull;
-
+	meas_data.errors.remote_stop_err = settings.client.from.abort && settings.retain.remote_mode;
 
 	//Timeouts
 	if(sqHomeTON.OUT){
@@ -153,7 +153,11 @@ static void SetTimers()
 static void LocalRemoteControl()
 {
 	auto_mode = settings.retain.remote_mode ? settings.client.from.auto_on : d_inputs.sb_auto_local;
-	select_period = settings.retain.remote_mode ? (uint32_t)settings.client.from.select_period : settings.retain.automat_timer;
+	if(settings.retain.remote_mode && settings.client.from.select_period>0)
+	{
+		settings.retain.automat_timer = (uint32_t)settings.client.from.select_period;
+	}
+	select_period = settings.retain.automat_timer;
 	// действия по нажатию кнопки
 	if((d_inputs.sb_make_proba && !settings.retain.remote_mode) ||
 				(settings.client.from.select_cmd && settings.retain.remote_mode))
@@ -236,6 +240,7 @@ static uint8_t CheckCriticalError()
 			(meas_data.errors.sq_left_err && d_outputs.uz_prob_rev)||
 			(meas_data.errors.sq_right_err && d_outputs.uz_prob_forv)||
 			(meas_data.errors.timeout_moving_left_err)||
+			(meas_data.errors.remote_stop_err) ||
 			(meas_data.errors.timeout_moving_right_err);
 	return !error;
 }
