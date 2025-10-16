@@ -64,7 +64,7 @@ void probotbor_process()
 		initialized = 1;
 		return;
 	}
-	NakopitelCheck();
+	//NakopitelCheck();
 	GetPositiveFronts();
 	GetErrors();
 	OnCommandCycle();
@@ -81,8 +81,8 @@ void probotbor_process()
 static void GetErrors()
 {
 	// Inputs
-	meas_data.errors.nakopitel_door_err = !d_inputs.sq_kanistra_door;
-	meas_data.errors.nakopitel_kanistra_err = !d_inputs.sq_kanistra;
+	//meas_data.errors.nakopitel_door_err = !d_inputs.sq_kanistra_door;
+	//meas_data.errors.nakopitel_kanistra_err = !d_inputs.sq_kanistra;
 	meas_data.errors.uz_err = !d_inputs.uz_prob_fail;
 	meas_data.errors.sb_abort_err = d_inputs.sb_stop;
 	meas_data.errors.sq_left_err = d_inputs.sq_kovsh_prob_left_1;
@@ -186,10 +186,10 @@ static void Moving()
 				(!targetSq && (d_inputs.sq_kovsh_prob_left_1 || d_inputs.sq_kovsh_prob_left_2))
 				|| rtSq_kovsh_left_1 || rtSq_kovsh_right_1)
 		{
-			if(cycle_probotbor)
-			{
-				meas_data.probInKanistra++;
-			}
+//			if(cycle_probotbor)
+//			{
+//				meas_data.probInKanistra++;
+//			}
 			StopCycles();
 
 		}
