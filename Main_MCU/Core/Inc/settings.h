@@ -84,7 +84,7 @@ typedef struct
 	uint16_t nakop_SV;
 	uint16_t remote_mode;
 	uint32_t automat_timer;
-
+	uint16_t sample_counter;
 
 }Retain;
 

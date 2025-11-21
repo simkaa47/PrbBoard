@@ -50,6 +50,7 @@ void Read_Inputs()
 	d_inputs.sb_auto_local				= meas_data.d_inputs.in8;
 	d_inputs.sq_kanistra				= meas_data.d_inputs.in9;
 	d_inputs.sq_kanistra_door			= meas_data.d_inputs.in10;
+	d_inputs.sq_kanistra_door			= meas_data.d_inputs.in11;
 
 
 

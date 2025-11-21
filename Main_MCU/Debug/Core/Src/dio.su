@@ -1,0 +1,3 @@
+dio.c:26:6:Read_Inputs	8	static
+dio.c:60:6:Write_Outputs	8	static
+dio.c:88:13:Filter_Inputs	24	static

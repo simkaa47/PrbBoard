@@ -25,6 +25,7 @@ typedef struct
 	unsigned int sb_auto_local :1;// переключатель "Авто"
 	unsigned int sq_kanistra :1;// датчик канистры
 	unsigned int sq_kanistra_door :1;// датчик двери канистры
+	unsigned int sb_rst_samples :1;// сброс счетчика отборов
 }DI;
 
 typedef struct

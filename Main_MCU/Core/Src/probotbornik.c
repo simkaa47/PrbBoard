@@ -64,7 +64,7 @@ void probotbor_process()
 		initialized = 1;
 		return;
 	}
-	//NakopitelCheck();
+	NakopitelCheck();
 	GetPositiveFronts();
 	GetErrors();
 	OnCommandCycle();
@@ -186,10 +186,10 @@ static void Moving()
 				(!targetSq && (d_inputs.sq_kovsh_prob_left_1 || d_inputs.sq_kovsh_prob_left_2))
 				|| rtSq_kovsh_left_1 || rtSq_kovsh_right_1)
 		{
-//			if(cycle_probotbor)
-//			{
-//				meas_data.probInKanistra++;
-//			}
+			if(cycle_probotbor && settings.retain.sample_counter)
+			{
+				meas_data.probInKanistra++;
+			}
 			StopCycles();
 
 		}
@@ -316,9 +316,15 @@ static void GetPositiveFronts()
 
 static void NakopitelCheck()
 {
-	if(settings.retain.nakop_SV==0)settings.retain.nakop_SV = 1;
-	if(!d_inputs.sq_kanistra)meas_data.probInKanistra = 0;
-	meas_data.nakopitelFull = meas_data.probInKanistra>=settings.retain.nakop_SV;
+	if(settings.retain.sample_counter){
+		if(settings.retain.nakop_SV==0)settings.retain.nakop_SV = 1;
+			//if(!d_inputs.sq_kanistra)meas_data.probInKanistra = 0;
+			meas_data.nakopitelFull = meas_data.probInKanistra>=settings.retain.nakop_SV;
+	}
+	if(d_inputs.sb_rst_samples){
+		meas_data.probInKanistra = 0;
+	}
+
 
 }
 

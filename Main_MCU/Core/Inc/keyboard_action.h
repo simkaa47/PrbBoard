@@ -26,7 +26,7 @@ typedef enum
 typedef struct
 {
 	float value;
-	char *name;
+	const char *name;
 
 }Dictionary;
 

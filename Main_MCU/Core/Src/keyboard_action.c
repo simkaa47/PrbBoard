@@ -63,6 +63,12 @@ const char parControl[] = {0x35, 0x2E, 0xD3, 0xEF, 0xF0, 0xE0, 0xE2, 0xEB, 0xE5,
 const char local[] = {0xCB, 0xEE, 0xEA, 0xE0, 0xEB, 0xFC, 0xED, 0xEE, 0xE5,  0x00};
 // Удаленное
 const char remote[] = {0xD3, 0xE4, 0xE0, 0xEB, 0xE5, 0xED, 0xED, 0xEE, 0xE5,  0x00};
+// 6.Счетчик проб проб
+const char sample_counter[] = {0x36, 0x2E, 0xD1, 0xF7, 0xE5, 0xF2, 0xF7, 0xE8, 0xEA, 0x20, 0xEF, 0xF0, 0xEE, 0xE1, 0x00};
+// Вкл
+const char on[] = {0xC2, 0xEA, 0xEB, 0x00};
+// Выкл
+const char off[] = {0xC2, 0xFB, 0xEA, 0xEB, 0x00};
 
 //3.Проб в канистре
 const char parNakopCV[] = {0x33, 0x2E, 0xCF, 0xF0, 0xEE, 0xE1, 0x20, 0xE2, 0x20, 0xEA, 0xE0, 0xED, 0xE8, 0xF1, 0xF2, 0xF0, 0xE5,  0x00};
@@ -175,6 +181,17 @@ Dictionary parities[] = {
 		}
 };
 
+Dictionary sample_counters[] = {
+		{
+				.name = on,
+				.value = 0
+		},
+		{
+				.name = off,
+				.value = 1
+		}
+};
+
 Dictionary controls[] = {
 		{
 				.name = local,
@@ -279,7 +296,17 @@ Row probotbor_parameters[] = {
 				.enums_len = sizeof(controls)/sizeof(Dictionary),
 				.type = ROW_USHORT
 		},
-
+		{
+				.name = sample_counter,
+				.isEdited = 1,
+				.data = (uint8_t*)(&settings.retain.sample_counter),
+				.isEnum = 1,
+				.name_len = sizeof(sample_counter),
+				.param_pos = 2,
+				.enums = sample_counters,
+				.enums_len = sizeof(sample_counters)/sizeof(Dictionary),
+				.type = ROW_USHORT
+		}
 
 
 };
@@ -582,7 +609,10 @@ static uint8_t ShowMainDisplay()
 	{
 		//Aвто ВКЛ
 		char  autoOn[] = {0x41, 0xE2, 0xF2, 0xEE, 0x20, 0xC2, 0xCA, 0xCB,  0x00};
-		sprintf(lcdAnswer[0],"%s %d/%d",autoOn, meas_data.probInKanistra, settings.retain.nakop_SV);
+		if(settings.retain.sample_counter){
+			sprintf(lcdAnswer[0],"%s %d/%d",autoOn, meas_data.probInKanistra, settings.retain.nakop_SV);
+		}
+
 		//Отбор через n с
 		char next[] = {0xCE, 0xF2, 0xE1, 0xEE, 0xF0, 0x20, 0xF7, 0xE5, 0xF0, 0xE5, 0xE7,  0x00};
 		// Накопитель полный
