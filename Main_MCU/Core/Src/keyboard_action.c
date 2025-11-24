@@ -48,6 +48,8 @@ const char fullNakop[] = {0xCD, 0xE0, 0xEA, 0xEE, 0xEF, 0xE8, 0xF2, 0xE5, 0xEB, 
 const char noConcentrat[] = { 0xCD, 0xE5, 0xF2, 0x20, 0xEA, 0xEE, 0xED, 0xF6, 0xE5, 0xED, 0xF2, 0xF0, 0xE0, 0xF2, 0xE0,  0x00};
 // Конвейер выключен
 const char conveyerStop[] = {0xCA, 0xEE, 0xED, 0xE2, 0xE5, 0xE9, 0xE5, 0xF0, 0x20, 0xE2, 0xFB, 0xEA, 0xEB, 0xFE, 0xF7, 0xE5, 0xED,  0x00};
+// Удаленный стоп
+const char remoteStop[] = {0xD3, 0xE4, 0xE0, 0xEB, 0xE5, 0xED, 0xED, 0xFB, 0xE9, 0x20, 0xF1, 0xF2, 0xEE, 0xEF, 0x00};
 
 
 
@@ -183,11 +185,11 @@ Dictionary parities[] = {
 
 Dictionary sample_counters[] = {
 		{
-				.name = on,
+				.name = off,
 				.value = 0
 		},
 		{
-				.name = off,
+				.name = on,
 				.value = 1
 		}
 };
@@ -239,6 +241,9 @@ Row Errors[] = {
 		},
 		{
 				.name = conveyerStop
+		},
+		{
+				.name = remoteStop
 		}
 };
 
@@ -357,7 +362,7 @@ Row commParameters[] = {
 				.isEnum = 1,
 				.name_len = sizeof(parParity),
 				.param_pos = 2,
-				.enums = parities,
+ 			    .enums = parities,
 				.enums_len = sizeof(parities)/sizeof(Dictionary),
 				.type = ROW_USHORT
 		},
@@ -996,6 +1001,11 @@ static uint8_t GetAllErrors()
 	{
 		errors_info[err_count].num = err_count+1;
 		errors_info[err_count].errorName = Errors[11].name;
+		err_count++;
+	}
+	if(meas_data.errors.remote_stop_err){
+		errors_info[err_count].num = err_count+1;
+		errors_info[err_count].errorName = Errors[12].name;
 		err_count++;
 	}
 	return 1;

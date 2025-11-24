@@ -8,6 +8,7 @@
 #include <dio.h>
 #include <settings.h>
 #include <timer.h>
+#include <keyboard.h>
 
 extern DI d_inputs;
 extern DO d_outputs;
@@ -38,6 +39,9 @@ uint32_t select_period;
 TON sqHomeTON;
 TON sqWorkTON;
 TON automatTON;
+TON rstCountsTON;
+
+extern uint8_t key_input_filtered_mask[COLUMNS_COUNT][ROWS_COUNT];
 
 
 static uint8_t Init_timers();
@@ -126,6 +130,7 @@ static uint8_t Init_timers()
 	if(Timer_Init(&(sqHomeTON))==TIMER_FAIL)return 0;
 	if(Timer_Init(&(sqWorkTON))==TIMER_FAIL)return 0;
 	if(Timer_Init(&(automatTON))==TIMER_FAIL)return 0;
+	if(Timer_Init(&(rstCountsTON))==TIMER_FAIL)return 0;
 	if(settings.retain.prob_toHomeTime==0)settings.retain.prob_toHomeTime = 10;
 	if(settings.retain.prob_toWorkTime==0)settings.retain.prob_toWorkTime = 10;
 	if(settings.retain.automat_timer==0)settings.retain.automat_timer = 60;
@@ -147,6 +152,9 @@ static void SetTimers()
 	automatTON.IN = auto_mode && !cycle_probotbor && !meas_data.nakopitelFull;
 	automatTON.SV = select_period * 1000;
 
+	//Сброс проб
+	rstCountsTON.IN = key_input_filtered_mask[5][2];
+	rstCountsTON.SV = 2000;
 	// Осталось до следующей пробы
 }
 
@@ -321,7 +329,10 @@ static void NakopitelCheck()
 			//if(!d_inputs.sq_kanistra)meas_data.probInKanistra = 0;
 			meas_data.nakopitelFull = meas_data.probInKanistra>=settings.retain.nakop_SV;
 	}
-	if(d_inputs.sb_rst_samples){
+	else{
+		meas_data.nakopitelFull = 0;
+	}
+	if(rstCountsTON.OUT){
 		meas_data.probInKanistra = 0;
 	}
 

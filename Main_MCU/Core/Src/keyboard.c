@@ -19,6 +19,7 @@ uint8_t key_input_old_mask[COLUMNS_COUNT][ROWS_COUNT]={0};
 uint8_t key_sence_count[COLUMNS_COUNT][ROWS_COUNT]={0};
 uint8_t positive_fronts[COLUMNS_COUNT][ROWS_COUNT]={0};
 
+
 const char *keys[6][6] = {{NULL,NULL,NULL,NULL,NULL,NULL},
 							{NULL,NULL,NULL,NULL,NULL,NULL},
 							{"Esc","Left","F4","F3","F2","F1"},
